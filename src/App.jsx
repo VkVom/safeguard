@@ -35,7 +35,7 @@ const Button = ({ children, primary, className = "", onClick }) => (
   <button 
     onClick={onClick}
     className={cn(
-      "relative group overflow-hidden px-8 md:px-10 py-4 md:py-5 rounded-full font-bold tracking-widest text-[10px] md:text-xs uppercase transition-all duration-300",
+      "relative group overflow-hidden px-8 md:px-10 py-3 md:py-4 rounded-full font-bold tracking-widest text-[10px] md:text-xs uppercase transition-all duration-300",
       primary 
         ? "bg-[#fbbf24] text-black hover:bg-white hover:scale-105 shadow-[0_0_30px_-10px_rgba(251,191,36,0.4)]" 
         : "border border-white/10 text-white hover:border-[#fbbf24] hover:text-[#fbbf24]",
@@ -77,22 +77,19 @@ const SpotlightCard = ({ children, className = "", noHover = false }) => {
   );
 };
 
-// FIXED: RESPONSIVE TYPOGRAPHY
 const SectionHeader = ({ label, title, subtitle, center }) => (
   <div className={cn("mb-16 md:mb-24 animate-enter", center ? "text-center mx-auto max-w-4xl" : "max-w-3xl")}>
     <div className={cn("flex items-center gap-2 md:gap-3 text-[#fbbf24] font-bold tracking-[0.2em] text-[10px] uppercase mb-4 md:mb-6", center && "justify-center")}>
       <span className="w-2 h-2 rounded-full bg-[#fbbf24] animate-pulse"></span>
       {label}
     </div>
-    {/* Updated text sizes: text-3xl on mobile -> text-7xl on desktop */}
-    <h2 className="text-3xl sm:text-5xl md:text-7xl font-black text-white leading-[1.1] md:leading-[0.95] tracking-tight mb-4 md:mb-6 wrap-break-words">
+    <h2 className="text-3xl sm:text-5xl md:text-7xl font-black text-white leading-[1.1] md:leading-[0.95] tracking-tight mb-4 md:mb-6 break-words hyphens-auto">
       {title}
     </h2>
-    {subtitle && <p className="text-base md:text-xl text-gray-400 leading-relaxed">{subtitle}</p>}
+    {subtitle && <p className="text-sm md:text-xl text-gray-400 leading-relaxed">{subtitle}</p>}
   </div>
 );
 
-// --- INFINITE MARQUEE ---
 const InfiniteMarquee = () => {
   const items = [
     "Premium Packaging", "Zero Damage", "Nationwide Transit", 
@@ -103,14 +100,14 @@ const InfiniteMarquee = () => {
   return (
     <div className="w-full py-8 md:py-10 overflow-hidden relative z-20 marquee-mask group">
       <div className="flex animate-scroll group-hover:[animation-play-state:paused]">
-        <div className="flex gap-16 md:gap-20 px-10 shrink-0">
+        <div className="flex gap-16 md:gap-24 px-10 shrink-0">
           {items.map((item, i) => (
             <div key={i} className="flex items-center gap-4 md:gap-6 text-white/20 font-black text-2xl md:text-4xl uppercase tracking-tighter hover:text-[#fbbf24] transition-colors cursor-default whitespace-nowrap">
               <Star className="w-6 h-6 md:w-8 md:h-8 fill-current" /> {item}
             </div>
           ))}
         </div>
-        <div className="flex gap-16 md:gap-20 px-10 shrink-0">
+        <div className="flex gap-16 md:gap-24 px-10 shrink-0">
           {items.map((item, i) => (
             <div key={`clone-${i}`} className="flex items-center gap-4 md:gap-6 text-white/20 font-black text-2xl md:text-4xl uppercase tracking-tighter hover:text-[#fbbf24] transition-colors cursor-default whitespace-nowrap">
               <Star className="w-6 h-6 md:w-8 md:h-8 fill-current" /> {item}
@@ -126,8 +123,7 @@ const InfiniteMarquee = () => {
 
 const HomePage = ({ setPage }) => (
   <div className="w-full">
-    {/* HERO */}
-    <section className="relative min-h-screen flex items-center pt-28 pb-20 md:pt-32 overflow-hidden">
+    <section className="relative min-h-screen flex items-center pt-24 pb-16 md:pt-32 md:pb-20 overflow-hidden">
       <div className="container mx-auto px-6 relative z-10 grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
         <div className="lg:col-span-7 animate-enter text-center lg:text-left">
           <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-8">
@@ -135,7 +131,7 @@ const HomePage = ({ setPage }) => (
             <span className="text-[10px] text-gray-300 font-bold uppercase tracking-widest">Pan-India Operations Live</span>
           </div>
           
-          <h1 className="text-5xl sm:text-7xl lg:text-9xl font-black text-white leading-[0.95] tracking-tighter mb-8">
+          <h1 className="text-5xl sm:text-7xl lg:text-9xl font-black text-white leading-[0.95] tracking-tighter mb-8 break-words">
             MOVE <br /> <span className="text-transparent bg-clip-text bg-linear-to-r from-[#fbbf24] to-orange-500">BEYOND</span> <br /> LIMITS.
           </h1>
           
@@ -173,7 +169,6 @@ const HomePage = ({ setPage }) => (
 
     <InfiniteMarquee />
 
-    {/* WHY CHOOSE US */}
     <section className="section-padding container mx-auto px-6">
        <SectionHeader label="Why SafeGuard" title="The Gold Standard." />
        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
@@ -195,7 +190,6 @@ const HomePage = ({ setPage }) => (
        </div>
     </section>
 
-    {/* LIVE STATS */}
     <section className="py-24 border-t border-white/5 bg-[#050505]">
        <div className="container mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-4 text-center md:text-left">
@@ -260,7 +254,7 @@ const ServicesPage = () => (
         }
       ].map((s, i) => (
         <div key={i} className={`flex flex-col lg:flex-row gap-12 lg:gap-20 items-center group animate-enter`} style={{ animationDelay: `${i*100}ms` }}>
-           <div className={`w-full lg:w-1/2 relative h-75 md:h-125 rounded-3xl overflow-hidden border border-white/5 ${i % 2 === 1 ? 'lg:order-2' : ''}`}>
+           <div className={`w-full lg:w-1/2 relative h-[300px] md:h-125 rounded-3xl overflow-hidden border border-white/5 ${i % 2 === 1 ? 'lg:order-2' : ''}`}>
               <img src={s.img} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" alt={s.title} loading="lazy" />
               <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 bg-black/80 backdrop-blur-md p-4 rounded-xl border border-white/10">
                  <div className="w-10 h-10 md:w-12 md:h-12 bg-[#fbbf24] rounded-lg flex items-center justify-center text-black">
@@ -317,7 +311,7 @@ const ProcessPage = () => {
             ))}
          </div>
 
-         <div className="relative h-100 md:h-175 rounded-3xl overflow-hidden border border-white/10 shadow-2xl lg:sticky lg:top-32">
+         <div className="relative h-[400px] md:h-175 rounded-3xl overflow-hidden border border-white/10 shadow-2xl lg:sticky lg:top-32">
             {steps.map((step, i) => (
                <img 
                  key={i}
@@ -339,7 +333,6 @@ const ProcessPage = () => {
 
 const AboutPage = () => (
   <div className="section-padding container mx-auto px-6">
-     {/* 1. HERO PHILOSOPHY */}
      <div className="grid lg:grid-cols-12 gap-16 items-center mb-40">
         <div className="lg:col-span-7 animate-enter">
            <span className="text-[#fbbf24] font-bold tracking-widest text-xs uppercase mb-6 block">The Origin</span>
@@ -362,7 +355,7 @@ const AboutPage = () => (
            </div>
         </div>
         
-        <div className="lg:col-span-5 relative animate-enter delay-200 h-100 md:h-150">
+        <div className="lg:col-span-5 relative animate-enter delay-200 h-[400px] md:h-150">
            <div className="absolute inset-0 bg-[#fbbf24] rounded-full blur-[120px] opacity-10 pointer-events-none"></div>
            <div className="relative h-full w-full rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-700">
               <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7" className="h-full w-full object-cover grayscale" alt="Team" />
@@ -374,7 +367,6 @@ const AboutPage = () => (
         </div>
      </div>
 
-     {/* 2. REPLACED SECTION: "THE STANDARD" (Visual/Creative) */}
      <SectionHeader label="The Standard" title="Built Different." />
      
      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -383,36 +375,28 @@ const AboutPage = () => (
              role: "The Hands", 
              title: "Master Packers", 
              desc: "Certified in fragile handling. They don't just pack; they preserve.",
-             // Image: Hands wrapping something carefully
              img: "https://images.unsplash.com/photo-1534972195531-d756b9bfa9f2?auto=format&fit=crop&q=80" 
            },
            { 
              role: "The Eyes", 
              title: "Route Command", 
              desc: "24/7 monitoring center ensuring your shipment never goes off-grid.",
-             // Image: High tech screen/map
              img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80" 
            },
            { 
              role: "The Shield", 
              title: "Safety Fleet", 
              desc: "Air-ride suspension trucks that eliminate road vibration.",
-             // Image: Modern Truck/Logistics
              img: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80" 
            }
         ].map((item, i) => (
-           <SpotlightCard key={i} className="p-0 overflow-hidden group border-0 relative h-125">
-              {/* Full Background Image */}
+           <SpotlightCard key={i} className="p-0 overflow-hidden group border-0 relative h-[500px]">
               <img 
                 src={item.img} 
                 className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-110 group-hover:scale-100" 
                 alt={item.title} 
               />
-              
-              {/* Dark Gradient Overlay */}
               <div className="absolute inset-0 bg-black/60 group-hover:bg-black/30 transition-colors duration-500"></div>
-              
-              {/* Content Overlay */}
               <div className="absolute inset-0 p-10 flex flex-col justify-end">
                  <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                     <p className="text-[#fbbf24] text-xs uppercase tracking-[0.3em] font-bold mb-3">{item.role}</p>
@@ -428,12 +412,21 @@ const AboutPage = () => (
   </div>
 );
 
-
+// --- FIXED MOBILE CONTACT PAGE ---
 const ContactPage = () => (
-  <div className="h-screen w-full flex items-center justify-center relative overflow-hidden pt-20"> 
+  <div className="h-screen w-full flex items-center justify-center relative overflow-hidden pt-10"> 
      <div className="container mx-auto px-4 lg:px-6">
-        <div className="w-full max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-24 items-center animate-enter">
+        <div className="w-full max-w-5xl mx-auto grid lg:grid-cols-2 gap-8 lg:gap-24 items-center animate-enter">
            
+           {/* Mobile Heading (Visible now!) */}
+           <div className="lg:hidden text-center mb-2">
+              <h2 className="text-4xl font-black text-white mb-2 leading-none">
+                 LET'S <br/> <span className="text-[#fbbf24]">MOVE.</span>
+              </h2>
+              <p className="text-sm text-gray-400">Precision quote in 2 hours.</p>
+           </div>
+
+           {/* Desktop Left Side */}
            <div className="hidden lg:flex flex-col justify-center">
               <h2 className="text-6xl font-black text-white mb-6 leading-[0.9]">
                  LET'S <br/> <span className="text-[#fbbf24]">MOVE.</span>
@@ -464,36 +457,37 @@ const ContactPage = () => (
               </div>
            </div>
 
-           <div className="bg-[#0a0a0a] p-8 rounded-3xl border border-white/10 shadow-2xl relative w-full max-w-lg mx-auto">
-              <form className="space-y-5">
-                 <div className="grid grid-cols-2 gap-4">
+           {/* Right Side: COMPACT FORM */}
+           <div className="bg-[#0a0a0a] p-5 md:p-8 rounded-2xl border border-white/10 shadow-2xl relative w-full max-w-md mx-auto">
+              <form className="space-y-3">
+                 <div className="grid grid-cols-2 gap-3">
                     <div>
-                       <label className="text-[10px] text-gray-500 font-bold uppercase mb-2 block ml-1">Name</label>
-                       <input className="w-full bg-white/5 border border-white/10 p-3 rounded-xl text-white focus:border-[#fbbf24] outline-none transition-colors text-sm" placeholder="Name" />
+                       <label className="text-[9px] text-gray-500 font-bold uppercase mb-1 block ml-1">Name</label>
+                       <input className="w-full bg-white/5 border border-white/10 p-2.5 rounded-lg text-white focus:border-[#fbbf24] outline-none transition-colors text-sm" placeholder="John" />
                     </div>
                     <div>
-                       <label className="text-[10px] text-gray-500 font-bold uppercase mb-2 block ml-1">Phone</label>
-                       <input className="w-full bg-white/5 border border-white/10 p-3 rounded-xl text-white focus:border-[#fbbf24] outline-none transition-colors text-sm" placeholder="+91..." />
+                       <label className="text-[9px] text-gray-500 font-bold uppercase mb-1 block ml-1">Phone</label>
+                       <input className="w-full bg-white/5 border border-white/10 p-2.5 rounded-lg text-white focus:border-[#fbbf24] outline-none transition-colors text-sm" placeholder="+91..." />
                     </div>
                  </div>
                  
-                 <div className="grid grid-cols-2 gap-4">
+                 <div className="grid grid-cols-2 gap-3">
                     <div>
-                       <label className="text-[10px] text-gray-500 font-bold uppercase mb-2 block ml-1">From</label>
-                       <input className="w-full bg-white/5 border border-white/10 p-3 rounded-xl text-white focus:border-[#fbbf24] outline-none transition-colors text-sm" placeholder="City A" />
+                       <label className="text-[9px] text-gray-500 font-bold uppercase mb-1 block ml-1">From</label>
+                       <input className="w-full bg-white/5 border border-white/10 p-2.5 rounded-lg text-white focus:border-[#fbbf24] outline-none transition-colors text-sm" placeholder="City A" />
                     </div>
                     <div>
-                       <label className="text-[10px] text-gray-500 font-bold uppercase mb-2 block ml-1">To</label>
-                       <input className="w-full bg-white/5 border border-white/10 p-3 rounded-xl text-white focus:border-[#fbbf24] outline-none transition-colors text-sm" placeholder="City B" />
+                       <label className="text-[9px] text-gray-500 font-bold uppercase mb-1 block ml-1">To</label>
+                       <input className="w-full bg-white/5 border border-white/10 p-2.5 rounded-lg text-white focus:border-[#fbbf24] outline-none transition-colors text-sm" placeholder="City B" />
                     </div>
                  </div>
 
                  <div>
-                    <label className="text-[10px] text-gray-500 font-bold uppercase mb-2 block ml-1">Details</label>
-                    <textarea className="w-full bg-white/5 border border-white/10 p-3 rounded-xl h-24 resize-none text-white focus:border-[#fbbf24] outline-none transition-colors text-sm" placeholder="Inventory list..."></textarea>
+                    <label className="text-[9px] text-gray-500 font-bold uppercase mb-1 block ml-1">Details</label>
+                    <textarea className="w-full bg-white/5 border border-white/10 p-2.5 rounded-lg h-16 md:h-24 resize-none text-white focus:border-[#fbbf24] outline-none transition-colors text-sm" placeholder="List items..."></textarea>
                  </div>
 
-                 <Button primary className="w-full py-4 text-xs tracking-widest">Get Quote</Button>
+                 <Button primary className="w-full py-3 text-xs tracking-widest">Get Quote</Button>
               </form>
            </div>
         </div>
@@ -562,7 +556,7 @@ const App = () => {
 
       <div className={`fixed inset-0 z-40 bg-black transition-all duration-700 ease-[cubic-bezier(0.76,0,0.24,1)] ${menuOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}>
          <div className="h-full flex flex-col items-center justify-center gap-10 relative overflow-hidden">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-125 bg-[#fbbf24] opacity-5 blur-[150px] rounded-full pointer-events-none"></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#fbbf24] opacity-5 blur-[150px] rounded-full pointer-events-none"></div>
             {links.map((link, i) => (
                <button 
                  key={link} 
@@ -588,6 +582,7 @@ const App = () => {
          {activePage === 'contact' && <ContactPage />}
       </main>
 
+      {/* FOOTER - Hidden on Contact Page to prevent scrolling */}
       {activePage !== 'contact' && (
         <footer className="border-t border-white/5 bg-[#020617] py-20 relative z-10 mt-auto text-center overflow-hidden">
            <h2 className="text-[18vw] font-black text-white leading-none select-none tracking-tighter opacity-5 mix-blend-overlay pointer-events-none">SAFEGUARD</h2>

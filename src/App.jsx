@@ -174,7 +174,7 @@ const ServicesPage = () => (
         { 
           id: "03", title: "Vehicle Transport", tagline: "Enclosed Carriers",
           desc: "Secure, enclosed container transport for luxury cars and bikes. Hydraulic lifts ensure zero-scratch loading and unloading.",
-          img: "https://images.unsplash.com/photo-1619682795661-69a443043301?auto=format&fit=crop&q=80&w=1200" 
+          img: "https://images.unsplash.com/photo-1725429976920-492648a26ac7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHRyYXNwb3J0JTIwdmVpaGNsZXxlbnwwfHwwfHx8MA%3D%3D" 
         }
       ].map((s, i) => (
         <div key={i} className={`flex flex-col-reverse ${i % 2 === 1 ? 'lg:flex-row-reverse' : 'lg:flex-row'} gap-12 lg:gap-20 items-center`}>
@@ -370,7 +370,7 @@ const App = () => {
           ))}
       </div>
 
-      <main className="flex-grow relative z-10 animate-page-enter" key={currentPage}>
+      <main className="grow relative z-10 animate-page-enter" key={currentPage}>
         {currentPage === 'home' && <HomePage setPage={setCurrentPage} />}
         {currentPage === 'services' && <ServicesPage />}
         {currentPage === 'process' && <ProcessPage />}

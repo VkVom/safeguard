@@ -35,16 +35,16 @@ const Button = ({ children, primary, className = "", onClick }) => (
   <button 
     onClick={onClick}
     className={cn(
-      "relative group overflow-hidden px-10 py-5 rounded-full font-bold tracking-widest text-xs uppercase transition-all duration-300",
+      "relative group overflow-hidden px-8 md:px-10 py-4 md:py-5 rounded-full font-bold tracking-widest text-[10px] md:text-xs uppercase transition-all duration-300",
       primary 
         ? "bg-[#fbbf24] text-black hover:bg-white hover:scale-105 shadow-[0_0_30px_-10px_rgba(251,191,36,0.4)]" 
         : "border border-white/10 text-white hover:border-[#fbbf24] hover:text-[#fbbf24]",
       className
     )}
   >
-    <span className="relative z-10 flex items-center justify-center gap-3">
+    <span className="relative z-10 flex items-center justify-center gap-2 md:gap-3">
       {children}
-      {primary && <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />}
+      {primary && <ArrowRight className="w-3 h-3 md:w-4 md:h-4 transition-transform group-hover:translate-x-1" />}
     </span>
   </button>
 );
@@ -63,7 +63,7 @@ const SpotlightCard = ({ children, className = "", noHover = false }) => {
       ref={divRef}
       onMouseMove={handleMouseMove}
       className={cn(
-        "relative overflow-hidden rounded-3xl border border-white/10 bg-[#0a0a0a] p-10 transition-all duration-500",
+        "relative overflow-hidden rounded-3xl border border-white/10 bg-[#0a0a0a] p-8 md:p-10 transition-all duration-500",
         !noHover && "hover:border-[#fbbf24]/50 hover:-translate-y-1 hover:shadow-2xl group",
         className
       )}
@@ -77,53 +77,73 @@ const SpotlightCard = ({ children, className = "", noHover = false }) => {
   );
 };
 
+// FIXED: RESPONSIVE TYPOGRAPHY
 const SectionHeader = ({ label, title, subtitle, center }) => (
-  <div className={cn("mb-24 animate-enter", center ? "text-center mx-auto max-w-4xl" : "max-w-3xl")}>
-    <div className={cn("flex items-center gap-3 text-[#fbbf24] font-bold tracking-[0.2em] text-[10px] uppercase mb-6", center && "justify-center")}>
+  <div className={cn("mb-16 md:mb-24 animate-enter", center ? "text-center mx-auto max-w-4xl" : "max-w-3xl")}>
+    <div className={cn("flex items-center gap-2 md:gap-3 text-[#fbbf24] font-bold tracking-[0.2em] text-[10px] uppercase mb-4 md:mb-6", center && "justify-center")}>
       <span className="w-2 h-2 rounded-full bg-[#fbbf24] animate-pulse"></span>
       {label}
     </div>
-    <h2 className="text-5xl md:text-7xl font-black text-white leading-[0.95] tracking-tight mb-6">{title}</h2>
-    {subtitle && <p className="text-xl text-gray-400 leading-relaxed">{subtitle}</p>}
+    {/* Updated text sizes: text-3xl on mobile -> text-7xl on desktop */}
+    <h2 className="text-3xl sm:text-5xl md:text-7xl font-black text-white leading-[1.1] md:leading-[0.95] tracking-tight mb-4 md:mb-6 wrap-break-words">
+      {title}
+    </h2>
+    {subtitle && <p className="text-base md:text-xl text-gray-400 leading-relaxed">{subtitle}</p>}
   </div>
 );
 
-const InfiniteMarquee = () => (
-  <div className="w-full py-6 border-y border-white/5 bg-black/80 marquee-mask overflow-hidden relative z-20">
-    <div className="flex animate-scroll whitespace-nowrap">
-      <div className="flex gap-24 min-w-full px-10">
-        {["Premium Packaging", "Zero Damage", "Nationwide Transit", "GPS Tracking", "Insurance Included", "24/7 Support", "White Glove Service"].map((item, i) => (
-          <div key={i} className="flex items-center gap-4 text-white/30 font-black text-lg uppercase tracking-widest hover:text-[#fbbf24] transition-colors cursor-default">
-            <Star className="w-5 h-5" /> {item}
-          </div>
-        ))}
+// --- INFINITE MARQUEE ---
+const InfiniteMarquee = () => {
+  const items = [
+    "Premium Packaging", "Zero Damage", "Nationwide Transit", 
+    "GPS Tracking", "Insurance Included", "24/7 Support", 
+    "White Glove Service"
+  ];
+
+  return (
+    <div className="w-full py-8 md:py-10 overflow-hidden relative z-20 marquee-mask group">
+      <div className="flex animate-scroll group-hover:[animation-play-state:paused]">
+        <div className="flex gap-16 md:gap-20 px-10 shrink-0">
+          {items.map((item, i) => (
+            <div key={i} className="flex items-center gap-4 md:gap-6 text-white/20 font-black text-2xl md:text-4xl uppercase tracking-tighter hover:text-[#fbbf24] transition-colors cursor-default whitespace-nowrap">
+              <Star className="w-6 h-6 md:w-8 md:h-8 fill-current" /> {item}
+            </div>
+          ))}
+        </div>
+        <div className="flex gap-16 md:gap-20 px-10 shrink-0">
+          {items.map((item, i) => (
+            <div key={`clone-${i}`} className="flex items-center gap-4 md:gap-6 text-white/20 font-black text-2xl md:text-4xl uppercase tracking-tighter hover:text-[#fbbf24] transition-colors cursor-default whitespace-nowrap">
+              <Star className="w-6 h-6 md:w-8 md:h-8 fill-current" /> {item}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 // --- PAGES ---
 
 const HomePage = ({ setPage }) => (
   <div className="w-full">
     {/* HERO */}
-    <section className="relative min-h-screen flex items-center pt-32 pb-20 overflow-hidden">
-      <div className="container mx-auto px-6 relative z-10 grid lg:grid-cols-12 gap-16 items-center">
-        <div className="lg:col-span-7 animate-enter">
-          <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-10">
+    <section className="relative min-h-screen flex items-center pt-28 pb-20 md:pt-32 overflow-hidden">
+      <div className="container mx-auto px-6 relative z-10 grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+        <div className="lg:col-span-7 animate-enter text-center lg:text-left">
+          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-8">
             <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_10px_#22c55e]"></span>
             <span className="text-[10px] text-gray-300 font-bold uppercase tracking-widest">Pan-India Operations Live</span>
           </div>
           
-          <h1 className="text-7xl sm:text-8xl lg:text-9xl font-black text-white leading-[0.9] tracking-tighter mb-10">
-            MOVE <br /> <span className="text-transparent bg-clip-text bg- linear-to-r from-[#fbbf24] to-orange-500">BEYOND</span> <br /> LIMITS.
+          <h1 className="text-5xl sm:text-7xl lg:text-9xl font-black text-white leading-[0.95] tracking-tighter mb-8">
+            MOVE <br /> <span className="text-transparent bg-clip-text bg-linear-to-r from-[#fbbf24] to-orange-500">BEYOND</span> <br /> LIMITS.
           </h1>
           
-          <p className="text-xl text-gray-400 max-w-xl mb-12 leading-relaxed pl-6 border-l-2 border-[#fbbf24]/30">
+          <p className="text-lg md:text-xl text-gray-400 max-w-xl mb-10 leading-relaxed mx-auto lg:mx-0 pl-0 lg:pl-6 lg:border-l-2 lg:border-[#fbbf24]/30">
             We engineer life transitions. Experience military-grade logistics with white-glove care for your most extensive moves.
           </p>
           
-          <div className="flex flex-wrap gap-6">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
             <Button primary onClick={() => setPage('contact')}>Get Custom Quote</Button>
             <Button onClick={() => setPage('services')}>Our Services</Button>
           </div>
@@ -156,39 +176,41 @@ const HomePage = ({ setPage }) => (
     {/* WHY CHOOSE US */}
     <section className="section-padding container mx-auto px-6">
        <SectionHeader label="Why SafeGuard" title="The Gold Standard." />
-       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           <SpotlightCard>
-             <Star className="w-12 h-12 text-[#fbbf24] mb-8" />
-             <h3 className="text-2xl font-bold text-white mb-4">On-Time Guarantee</h3>
-             <p className="text-gray-400 text-base leading-relaxed">We value your time. If we are late, we pay you. It's that simple.</p>
+             <Star className="w-10 h-10 md:w-12 md:h-12 text-[#fbbf24] mb-6 md:mb-8" />
+             <h3 className="text-xl md:text-2xl font-bold text-white mb-3 md:mb-4">On-Time Guarantee</h3>
+             <p className="text-gray-400 text-sm md:text-base leading-relaxed">We value your time. If we are late, we pay you. It's that simple.</p>
           </SpotlightCard>
           <SpotlightCard>
-             <Lock className="w-12 h-12 text-[#fbbf24] mb-8" />
-             <h3 className="text-2xl font-bold text-white mb-4">Tamper Proof</h3>
-             <p className="text-gray-400 text-base leading-relaxed">Our containers use cryptographic seals. Only you can open them.</p>
+             <Lock className="w-10 h-10 md:w-12 md:h-12 text-[#fbbf24] mb-6 md:mb-8" />
+             <h3 className="text-xl md:text-2xl font-bold text-white mb-3 md:mb-4">Tamper Proof</h3>
+             <p className="text-gray-400 text-sm md:text-base leading-relaxed">Our containers use cryptographic seals. Only you can open them.</p>
           </SpotlightCard>
           <SpotlightCard>
-             <Users className="w-12 h-12 text-[#fbbf24] mb-8" />
-             <h3 className="text-2xl font-bold text-white mb-4">Dedicated Manager</h3>
-             <p className="text-gray-400 text-base leading-relaxed">One point of contact. No chatbots, no waiting lines. A real human.</p>
+             <Users className="w-10 h-10 md:w-12 md:h-12 text-[#fbbf24] mb-6 md:mb-8" />
+             <h3 className="text-xl md:text-2xl font-bold text-white mb-3 md:mb-4">Dedicated Manager</h3>
+             <p className="text-gray-400 text-sm md:text-base leading-relaxed">One point of contact. No chatbots, no waiting lines. A real human.</p>
           </SpotlightCard>
        </div>
     </section>
 
     {/* LIVE STATS */}
     <section className="py-24 border-t border-white/5 bg-[#050505]">
-       <div className="container mx-auto px-6 flex flex-wrap justify-between gap-16 text-center md:text-left">
-          {[
-             { val: "15k+", lbl: "Moves Completed" },
-             { val: "120+", lbl: "Cities Covered" },
-             { val: "0%", lbl: "Damage Rate" },
-             { val: "4.9", lbl: "User Rating" }
-          ].map((stat, i) => (
-             <div key={i} className="flex-1 min-w-37.5">
-                <h3 className="text-6xl font-black text-white mb-3">{stat.val}</h3>
-                <p className="text-[#fbbf24] text-xs font-bold uppercase tracking-widest">{stat.lbl}</p>
-             </div>
-          ))}
+       <div className="container mx-auto px-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-4 text-center md:text-left">
+            {[
+               { val: "15k+", lbl: "Moves Completed" },
+               { val: "120+", lbl: "Cities Covered" },
+               { val: "0%", lbl: "Damage Rate" },
+               { val: "4.9", lbl: "User Rating" }
+            ].map((stat, i) => (
+               <div key={i} className="flex flex-col items-center md:items-start">
+                  <h3 className="text-4xl md:text-6xl font-black text-white mb-2">{stat.val}</h3>
+                  <p className="text-[#fbbf24] text-[10px] md:text-xs font-bold uppercase tracking-widest">{stat.lbl}</p>
+               </div>
+            ))}
+          </div>
        </div>
     </section>
   </div>
@@ -202,21 +224,21 @@ const ServicesPage = () => (
       subtitle="We specialize in complex logistics. From delicate heirlooms to industrial server racks, we have a protocol for everything." 
     />
     
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-32">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-24 md:mb-32">
        {[
           { icon: <Home />, label: "Home" },
           { icon: <Zap />, label: "Office" },
           { icon: <Truck />, label: "Vehicle" },
           { icon: <Box />, label: "Storage" }
        ].map((item, i) => (
-          <div key={i} className="p-8 rounded-2xl border border-white/5 bg-[#0a0a0a] flex flex-col items-center justify-center gap-4 hover:border-[#fbbf24] transition-colors cursor-pointer group">
+          <div key={i} className="p-6 md:p-8 rounded-2xl border border-white/5 bg-[#0a0a0a] flex flex-col items-center justify-center gap-4 hover:border-[#fbbf24] transition-colors cursor-pointer group">
              <div className="text-gray-400 group-hover:text-[#fbbf24] transition-colors scale-125">{item.icon}</div>
-             <span className="text-sm font-bold text-white uppercase tracking-wider">{item.label}</span>
+             <span className="text-xs md:text-sm font-bold text-white uppercase tracking-wider">{item.label}</span>
           </div>
        ))}
     </div>
 
-    <div className="space-y-32">
+    <div className="space-y-24 md:space-y-32">
       {[
         { 
           title: "Residential Moving", 
@@ -237,22 +259,22 @@ const ServicesPage = () => (
           img: "https://images.unsplash.com/photo-1497366811353-6870744d04b2"
         }
       ].map((s, i) => (
-        <div key={i} className={`flex flex-col lg:flex-row gap-20 items-center group animate-enter`} style={{ animationDelay: `${i*100}ms` }}>
-           <div className={`w-full lg:w-1/2 relative h-125 rounded-3xl overflow-hidden border border-white/5 ${i % 2 === 1 ? 'lg:order-2' : ''}`}>
+        <div key={i} className={`flex flex-col lg:flex-row gap-12 lg:gap-20 items-center group animate-enter`} style={{ animationDelay: `${i*100}ms` }}>
+           <div className={`w-full lg:w-1/2 relative h-75 md:h-125 rounded-3xl overflow-hidden border border-white/5 ${i % 2 === 1 ? 'lg:order-2' : ''}`}>
               <img src={s.img} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" alt={s.title} loading="lazy" />
-              <div className="absolute bottom-8 left-8 bg-black/80 backdrop-blur-md p-4 rounded-xl border border-white/10">
-                 <div className="w-12 h-12 bg-[#fbbf24] rounded-lg flex items-center justify-center text-black">
+              <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 bg-black/80 backdrop-blur-md p-4 rounded-xl border border-white/10">
+                 <div className="w-10 h-10 md:w-12 md:h-12 bg-[#fbbf24] rounded-lg flex items-center justify-center text-black">
                     {s.icon}
                  </div>
               </div>
            </div>
 
            <div className={`w-full lg:w-1/2 ${i % 2 === 1 ? 'lg:text-right' : ''}`}>
-              <h3 className="text-4xl font-bold text-white mb-6 group-hover:text-[#fbbf24] transition-colors">{s.title}</h3>
-              <p className="text-xl text-gray-400 leading-relaxed mb-10">{s.desc}</p>
+              <h3 className="text-3xl md:text-4xl font-bold text-white mb-4 md:mb-6 group-hover:text-[#fbbf24] transition-colors">{s.title}</h3>
+              <p className="text-lg md:text-xl text-gray-400 leading-relaxed mb-8 md:mb-10">{s.desc}</p>
               <ul className={`space-y-4 ${i % 2 === 1 ? 'flex flex-col items-end' : ''}`}>
                  {['Premium Packaging', 'Insurance Included', 'Live Tracking'].map((feat, idx) => (
-                    <li key={idx} className="flex items-center gap-4 text-base font-bold text-gray-300">
+                    <li key={idx} className="flex items-center gap-4 text-sm md:text-base font-bold text-gray-300">
                        <CheckCircle className="w-5 h-5 text-[#fbbf24]" /> {feat}
                     </li>
                  ))}
@@ -270,8 +292,7 @@ const ProcessPage = () => {
   const steps = [
     { title: "Consultation", desc: "Video survey or onsite visit to inventory items. Instant quote generation.", img: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7" },
     { title: "Packing Day", desc: "Team arrives with color-coded boxes. Fragile items get 3-layer protection.", img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c" },
-    // NEW IMAGE ADDED HERE
-    { title: "Secure Transit", desc: "Goods loaded into GPS-enabled closed containers. Live tracking link provided.", img: "https://images.unsplash.com/photo-1604357209793-fca5dca89f97?w=600&auto=format&fit=crop&q=60" },
+    { title: "Secure Transit", desc: "Goods loaded into GPS-enabled closed containers. Live tracking link provided.", img: "https://images.unsplash.com/photo-1604357209793-fca5dca89f97?w=600" },
     { title: "The Unboxing", desc: "We unload, assemble furniture, and remove all debris before leaving.", img: "https://images.unsplash.com/photo-1497366811353-6870744d04b2" }
   ];
 
@@ -279,24 +300,24 @@ const ProcessPage = () => {
     <div className="section-padding container mx-auto px-6">
       <SectionHeader label="The Blueprint" title="Simplicity by Design." center />
       
-      <div className="grid lg:grid-cols-2 gap-20 mt-20 items-center">
-         <div className="space-y-8">
+      <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 mt-16 items-center">
+         <div className="space-y-6">
             {steps.map((step, i) => (
                <div 
                  key={i} 
                  onMouseEnter={() => setActiveStep(i)}
-                 className={`p-10 rounded-3xl border transition-all duration-300 cursor-pointer ${activeStep === i ? 'bg-[#fbbf24] border-[#fbbf24] text-black scale-105 shadow-xl' : 'bg-[#0a0a0a] border-white/10 text-white hover:border-white/30'}`}
+                 className={`p-8 md:p-10 rounded-3xl border transition-all duration-300 cursor-pointer ${activeStep === i ? 'bg-[#fbbf24] border-[#fbbf24] text-black scale-105 shadow-xl' : 'bg-[#0a0a0a] border-white/10 text-white hover:border-white/30'}`}
                >
                   <div className="flex justify-between items-center mb-4">
-                     <h3 className="text-3xl font-bold">{step.title}</h3>
-                     <span className={`text-2xl font-black ${activeStep === i ? 'text-black/20' : 'text-white/10'}`}>0{i+1}</span>
+                     <h3 className="text-2xl md:text-3xl font-bold">{step.title}</h3>
+                     <span className={`text-xl md:text-2xl font-black ${activeStep === i ? 'text-black/20' : 'text-white/10'}`}>0{i+1}</span>
                   </div>
                   <p className={activeStep === i ? 'text-black/80 font-medium' : 'text-gray-400'}>{step.desc}</p>
                </div>
             ))}
          </div>
 
-         <div className=" h-175 rounded-3xl overflow-hidden border border-white/10 shadow-2xl sticky top-32">
+         <div className="relative h-100 md:h-175 rounded-3xl overflow-hidden border border-white/10 shadow-2xl lg:sticky lg:top-32">
             {steps.map((step, i) => (
                <img 
                  key={i}
@@ -305,10 +326,10 @@ const ProcessPage = () => {
                  alt={step.title}
                />
             ))}
-            <div className="absolute inset-0 bg- linear-to-t from-black/90 to-transparent"></div>
+            <div className="absolute inset-0 bg-linear-to-t from-black/90 to-transparent"></div>
             <div className="absolute bottom-12 left-12">
                <span className="text-[#fbbf24] font-bold tracking-widest text-sm uppercase mb-3 block">Current Phase</span>
-               <h3 className="text-5xl font-black text-white">{steps[activeStep].title}</h3>
+               <h3 className="text-4xl md:text-5xl font-black text-white">{steps[activeStep].title}</h3>
             </div>
          </div>
       </div>
@@ -322,8 +343,8 @@ const AboutPage = () => (
      <div className="grid lg:grid-cols-12 gap-16 items-center mb-40">
         <div className="lg:col-span-7 animate-enter">
            <span className="text-[#fbbf24] font-bold tracking-widest text-xs uppercase mb-6 block">The Origin</span>
-           <h2 className="text-6xl md:text-8xl font-black text-white mb-10 leading-[0.9]">
-             "We don't just move objects. <br/> <span className="text-transparent bg-clip-text bg- linear-to-r from-[#fbbf24] to-orange-600">We move lives."</span>
+           <h2 className="text-5xl md:text-8xl font-black text-white mb-10 leading-[0.9]">
+             "We don't just move objects. <br/> <span className="text-transparent bg-clip-text bg-linear-to-r from-[#fbbf24] to-orange-600">We move lives."</span>
            </h2>
            <p className="text-xl text-gray-400 mb-12 leading-relaxed max-w-2xl">
               SafeGuard was founded on a simple premise: Moving is one of life's most stressful events. It shouldn't be. We replaced the "guys in a truck" model with a "hospitality logistics" model.
@@ -331,21 +352,21 @@ const AboutPage = () => (
            
            <div className="grid grid-cols-2 gap-8 pt-8 border-t border-white/10">
               <div>
-                 <span className="block text-5xl font-black text-white mb-2">500+</span>
+                 <span className="block text-4xl md:text-5xl font-black text-white mb-2">500+</span>
                  <span className="text-xs text-gray-500 uppercase tracking-widest font-bold">Vetted Experts</span>
               </div>
               <div>
-                 <span className="block text-5xl font-black text-white mb-2">20+</span>
+                 <span className="block text-4xl md:text-5xl font-black text-white mb-2">20+</span>
                  <span className="text-xs text-gray-500 uppercase tracking-widest font-bold">States Covered</span>
               </div>
            </div>
         </div>
         
-        <div className="lg:col-span-5 relative animate-enter delay-200 h-150">
+        <div className="lg:col-span-5 relative animate-enter delay-200 h-100 md:h-150">
            <div className="absolute inset-0 bg-[#fbbf24] rounded-full blur-[120px] opacity-10 pointer-events-none"></div>
            <div className="relative h-full w-full rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-700">
               <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7" className="h-full w-full object-cover grayscale" alt="Team" />
-              <div className="absolute bottom-0 w-full p-10 bg- linear-to-t from-black via-black/80 to-transparent">
+              <div className="absolute bottom-0 w-full p-10 bg-linear-to-t from-black via-black/80 to-transparent">
                  <Quote className="w-12 h-12 text-[#fbbf24] mb-4" />
                  <p className="text-white text-lg italic font-medium">"Excellence is not an act, but a habit."</p>
               </div>
@@ -353,22 +374,53 @@ const AboutPage = () => (
         </div>
      </div>
 
-     {/* 2. THE ARCHITECTS (TEAM) */}
-     <SectionHeader label="The Architects" title="Leadership." />
+     {/* 2. REPLACED SECTION: "THE STANDARD" (Visual/Creative) */}
+     <SectionHeader label="The Standard" title="Built Different." />
+     
      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {[
-           { name: "Arun Kumar", role: "Head of Operations", img: "https://images.unsplash.com/photo-1560250097-0b93528c311a" },
-           { name: "Sarah Jenkins", role: "Customer Experience", img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2" },
-           { name: "David Chen", role: "Logistics Strategy", img: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e" }
-        ].map((person, i) => (
-           <SpotlightCard key={i} className="p-0 overflow-hidden group border-0">
-              <div className="h-100 overflow-hidden relative">
-                 <div className="absolute inset-0 bg-[#fbbf24] mix-blend-color opacity-0 group-hover:opacity-20 transition-opacity z-10"></div>
-                 <img src={person.img} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110" alt={person.name} />
-              </div>
-              <div className="p-8 bg-[#0a0a0a] border-t border-white/10">
-                 <h4 className="text-2xl font-bold text-white">{person.name}</h4>
-                 <p className="text-[#fbbf24] text-xs uppercase tracking-widest mt-2 font-bold">{person.role}</p>
+           { 
+             role: "The Hands", 
+             title: "Master Packers", 
+             desc: "Certified in fragile handling. They don't just pack; they preserve.",
+             // Image: Hands wrapping something carefully
+             img: "https://images.unsplash.com/photo-1534972195531-d756b9bfa9f2?auto=format&fit=crop&q=80" 
+           },
+           { 
+             role: "The Eyes", 
+             title: "Route Command", 
+             desc: "24/7 monitoring center ensuring your shipment never goes off-grid.",
+             // Image: High tech screen/map
+             img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80" 
+           },
+           { 
+             role: "The Shield", 
+             title: "Safety Fleet", 
+             desc: "Air-ride suspension trucks that eliminate road vibration.",
+             // Image: Modern Truck/Logistics
+             img: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80" 
+           }
+        ].map((item, i) => (
+           <SpotlightCard key={i} className="p-0 overflow-hidden group border-0 relative h-125">
+              {/* Full Background Image */}
+              <img 
+                src={item.img} 
+                className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-110 group-hover:scale-100" 
+                alt={item.title} 
+              />
+              
+              {/* Dark Gradient Overlay */}
+              <div className="absolute inset-0 bg-black/60 group-hover:bg-black/30 transition-colors duration-500"></div>
+              
+              {/* Content Overlay */}
+              <div className="absolute inset-0 p-10 flex flex-col justify-end">
+                 <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                    <p className="text-[#fbbf24] text-xs uppercase tracking-[0.3em] font-bold mb-3">{item.role}</p>
+                    <h4 className="text-3xl font-black text-white mb-4">{item.title}</h4>
+                    <p className="text-gray-300 text-sm leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                       {item.desc}
+                    </p>
+                 </div>
               </div>
            </SpotlightCard>
         ))}
@@ -376,14 +428,12 @@ const AboutPage = () => (
   </div>
 );
 
-// --- NEW COMPACT & CENTERED CONTACT PAGE ---
+
 const ContactPage = () => (
-  // 1. Fixed Height Screen (No Scroll on Desktop)
   <div className="h-screen w-full flex items-center justify-center relative overflow-hidden pt-20"> 
      <div className="container mx-auto px-4 lg:px-6">
         <div className="w-full max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-24 items-center animate-enter">
            
-           {/* Left Side: Info (More Compact) */}
            <div className="hidden lg:flex flex-col justify-center">
               <h2 className="text-6xl font-black text-white mb-6 leading-[0.9]">
                  LET'S <br/> <span className="text-[#fbbf24]">MOVE.</span>
@@ -414,10 +464,8 @@ const ContactPage = () => (
               </div>
            </div>
 
-           {/* Right Side: COMPACT FORM (Centered, Smaller Inputs) */}
            <div className="bg-[#0a0a0a] p-8 rounded-3xl border border-white/10 shadow-2xl relative w-full max-w-lg mx-auto">
               <form className="space-y-5">
-                 {/* Top Row */}
                  <div className="grid grid-cols-2 gap-4">
                     <div>
                        <label className="text-[10px] text-gray-500 font-bold uppercase mb-2 block ml-1">Name</label>
@@ -429,7 +477,6 @@ const ContactPage = () => (
                     </div>
                  </div>
                  
-                 {/* Middle Row */}
                  <div className="grid grid-cols-2 gap-4">
                     <div>
                        <label className="text-[10px] text-gray-500 font-bold uppercase mb-2 block ml-1">From</label>
@@ -441,7 +488,6 @@ const ContactPage = () => (
                     </div>
                  </div>
 
-                 {/* Textarea (Reduced Height) */}
                  <div>
                     <label className="text-[10px] text-gray-500 font-bold uppercase mb-2 block ml-1">Details</label>
                     <textarea className="w-full bg-white/5 border border-white/10 p-3 rounded-xl h-24 resize-none text-white focus:border-[#fbbf24] outline-none transition-colors text-sm" placeholder="Inventory list..."></textarea>
@@ -454,8 +500,6 @@ const ContactPage = () => (
      </div>
   </div>
 );
-
-// --- APP LAYOUT ---
 
 const App = () => {
   const [activePage, setActivePage] = useState('home');
@@ -481,7 +525,6 @@ const App = () => {
       <div className="bg-grid-pattern"></div>
       <MouseSpotlight />
       
-      {/* NAVBAR */}
       <nav className={`fixed w-full z-50 transition-all duration-500 ${scrolled ? 'py-4' : 'py-8'}`}>
         <div className={`container mx-auto px-6 rounded-full border ${scrolled ? 'bg-black/90 backdrop-blur-xl border-white/10 shadow-2xl' : 'border-transparent'} transition-all duration-500`}>
           <div className="flex items-center justify-between h-16">
@@ -517,7 +560,6 @@ const App = () => {
         </div>
       </nav>
 
-      {/* MOBILE MENU */}
       <div className={`fixed inset-0 z-40 bg-black transition-all duration-700 ease-[cubic-bezier(0.76,0,0.24,1)] ${menuOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}>
          <div className="h-full flex flex-col items-center justify-center gap-10 relative overflow-hidden">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-125 bg-[#fbbf24] opacity-5 blur-[150px] rounded-full pointer-events-none"></div>
@@ -546,7 +588,6 @@ const App = () => {
          {activePage === 'contact' && <ContactPage />}
       </main>
 
-      {/* FOOTER - Hidden on Contact Page to prevent scrolling */}
       {activePage !== 'contact' && (
         <footer className="border-t border-white/5 bg-[#020617] py-20 relative z-10 mt-auto text-center overflow-hidden">
            <h2 className="text-[18vw] font-black text-white leading-none select-none tracking-tighter opacity-5 mix-blend-overlay pointer-events-none">SAFEGUARD</h2>

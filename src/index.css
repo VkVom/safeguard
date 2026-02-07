@@ -1,76 +1,60 @@
 @import "tailwindcss";
-
-
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
 
-
-
-/* --- BASE SETTINGS --- */
+/* --- PERFORMANCE BASE --- */
 body {
   font-family: 'Inter', sans-serif;
-  background-color: #020617; /* Slate 950 */
+  background-color: #020617;
   color: #f8fafc;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* Hardware Acceleration for smooth scrolling */
+  transform: translateZ(0);
 }
 
-/* 1. CINEMATIC GRAIN */
+/* 1. OPTIMIZED NOISE (Static image instead of CPU-heavy SVG filter) */
 .bg-noise {
   position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  pointer-events: none; z-index: 0; opacity: 0.035;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  inset: 0;
+  z-index: 0;
+  opacity: 0.03;
+  pointer-events: none;
+  background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+  background-size: 100px;
 }
 
-/* 2. TYPOGRAPHY & UTILITIES */
-h1, h2, h3, h4, .font-display {
-  font-family: 'Space Grotesk', sans-serif;
-}
+/* 2. TYPOGRAPHY */
+h1, h2, h3, h4, .font-display { font-family: 'Space Grotesk', sans-serif; }
 
-/* Fluid Typography: Scales smoothly between mobile and desktop sizes */
+/* Fluid Text Scaling */
 .text-fluid-h1 { font-size: clamp(3.5rem, 8vw, 7rem); }
 .text-fluid-h2 { font-size: clamp(2.5rem, 5vw, 5rem); }
 
+/* 3. PERFORMANCE UTILITIES */
 .glass-panel {
-  background: rgba(2, 6, 23, 0.7); /* Darker base for better contrast */
-  -webkit-backdrop-filter: blur(24px);
-  backdrop-filter: blur(24px);
+  background: rgba(2, 6, 23, 0.8); /* Less transparency = Faster render */
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px); /* Reduced blur radius for FPS */
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* 3. ANIMATIONS */
-/* Smooth Page Transition */
+/* 4. ANIMATIONS (GPU Optimized) */
 @keyframes page-enter {
-  from { opacity: 0; transform: translateY(15px) scale(0.98); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 .animate-page-enter {
-  animation: page-enter 0.5s cubic-bezier(0.215, 0.610, 0.355, 1.000) forwards;
+  animation: page-enter 0.4s ease-out forwards;
+  will-change: transform, opacity; /* Hints browser to use GPU */
 }
 
-/* Staggered Menu Items */
-@keyframes slide-in-up {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-.animate-slide-in-up {
-    animation: slide-in-up 0.4s ease-out forwards;
-}
-
-/* Marquee */
+/* Marquee Mask */
 .marquee-mask {
-  mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
-  -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
 }
 @keyframes scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% { transform: translate3d(0, 0, 0); } /* 3D transform forces GPU */
+  100% { transform: translate3d(-50%, 0, 0); }
 }
-.animate-scroll { animation: scroll 45s linear infinite; }
-
-/* Custom Scrollbar */
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: #020617; }
-::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: #fbbf24; }
+.animate-scroll { animation: scroll 40s linear infinite; }

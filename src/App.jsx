@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { 
   Shield, Truck, Phone, MapPin, Menu, X, ArrowRight, Star, 
   Box, Home, CheckCircle, Globe, Zap, Quote, Layers, Award, 
-  BarChart, Lock, Users, Server
+  BarChart, Lock, Users, Server, Landmark, Briefcase, Sparkles, Mail
 } from 'lucide-react';
 
 // --- UTILS ---
@@ -35,16 +35,16 @@ const Button = ({ children, primary, className = "", onClick }) => (
   <button 
     onClick={onClick}
     className={cn(
-      "relative group overflow-hidden px-8 md:px-10 py-3 md:py-4 rounded-full font-bold tracking-widest text-[10px] md:text-xs uppercase transition-all duration-300",
+      "relative group overflow-hidden px-8 md:px-12 py-4 md:py-5 rounded-full font-bold tracking-widest text-[10px] md:text-sm uppercase transition-all duration-300",
       primary 
-        ? "bg-[#fbbf24] text-black hover:bg-white hover:scale-105 shadow-[0_0_30px_-10px_rgba(251,191,36,0.4)]" 
+        ? "bg-[#fbbf24] text-black hover:bg-white hover:scale-105 shadow-[0_0_40px_-10px_rgba(251,191,36,0.5)]" 
         : "border border-white/10 text-white hover:border-[#fbbf24] hover:text-[#fbbf24]",
       className
     )}
   >
     <span className="relative z-10 flex items-center justify-center gap-2 md:gap-3">
       {children}
-      {primary && <ArrowRight className="w-3 h-3 md:w-4 md:h-4 transition-transform group-hover:translate-x-1" />}
+      {primary && <ArrowRight className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:translate-x-1" />}
     </span>
   </button>
 );
@@ -98,19 +98,19 @@ const InfiniteMarquee = () => {
   ];
 
   return (
-    <div className="w-full py-8 md:py-10 overflow-hidden relative z-20 marquee-mask group">
+    <div className="w-full py-8 md:py-12 overflow-hidden relative z-20 marquee-mask group">
       <div className="flex animate-scroll group-hover:[animation-play-state:paused]">
-        <div className="flex gap-16 md:gap-24 px-10 shrink-0">
+        <div className="flex gap-16 md:gap-32 px-10 shrink-0">
           {items.map((item, i) => (
-            <div key={i} className="flex items-center gap-4 md:gap-6 text-white/20 font-black text-2xl md:text-4xl uppercase tracking-tighter hover:text-[#fbbf24] transition-colors cursor-default whitespace-nowrap">
-              <Star className="w-6 h-6 md:w-8 md:h-8 fill-current" /> {item}
+            <div key={i} className="flex items-center gap-4 md:gap-8 text-white/20 font-black text-3xl md:text-5xl uppercase tracking-tighter hover:text-[#fbbf24] transition-colors cursor-default whitespace-nowrap">
+              <Star className="w-8 h-8 md:w-10 md:h-10 fill-current" /> {item}
             </div>
           ))}
         </div>
-        <div className="flex gap-16 md:gap-24 px-10 shrink-0">
+        <div className="flex gap-16 md:gap-32 px-10 shrink-0">
           {items.map((item, i) => (
-            <div key={`clone-${i}`} className="flex items-center gap-4 md:gap-6 text-white/20 font-black text-2xl md:text-4xl uppercase tracking-tighter hover:text-[#fbbf24] transition-colors cursor-default whitespace-nowrap">
-              <Star className="w-6 h-6 md:w-8 md:h-8 fill-current" /> {item}
+            <div key={`clone-${i}`} className="flex items-center gap-4 md:gap-8 text-white/20 font-black text-3xl md:text-5xl uppercase tracking-tighter hover:text-[#fbbf24] transition-colors cursor-default whitespace-nowrap">
+              <Star className="w-8 h-8 md:w-10 md:h-10 fill-current" /> {item}
             </div>
           ))}
         </div>
@@ -123,6 +123,7 @@ const InfiniteMarquee = () => {
 
 const HomePage = ({ setPage }) => (
   <div className="w-full">
+    {/* HERO */}
     <section className="relative min-h-screen flex items-center pt-24 pb-16 md:pt-32 md:pb-20 overflow-hidden">
       <div className="container mx-auto px-6 relative z-10 grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
         <div className="lg:col-span-7 animate-enter text-center lg:text-left">
@@ -210,20 +211,21 @@ const HomePage = ({ setPage }) => (
   </div>
 );
 
+// --- UPDATED SERVICES PAGE: ZIG-ZAG LAYOUT + LEFT ALIGNED TEXT ---
 const ServicesPage = () => (
   <div className="section-padding container mx-auto px-6">
     <SectionHeader 
       label="Our Expertise" 
       title="Comprehensive Capabilities." 
-      subtitle="We specialize in complex logistics. From delicate heirlooms to industrial server racks, we have a protocol for everything." 
+      subtitle="From delicate heirlooms to heavy bank vaults, we have a protocol for every asset class." 
     />
     
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-24 md:mb-32">
        {[
           { icon: <Home />, label: "Home" },
-          { icon: <Zap />, label: "Office" },
-          { icon: <Truck />, label: "Vehicle" },
-          { icon: <Box />, label: "Storage" }
+          { icon: <Briefcase />, label: "Office" },
+          { icon: <Landmark />, label: "Banks" },
+          { icon: <Sparkles />, label: "Cleaning" }
        ].map((item, i) => (
           <div key={i} className="p-6 md:p-8 rounded-2xl border border-white/5 bg-[#0a0a0a] flex flex-col items-center justify-center gap-4 hover:border-[#fbbf24] transition-colors cursor-pointer group">
              <div className="text-gray-400 group-hover:text-[#fbbf24] transition-colors scale-125">{item.icon}</div>
@@ -238,23 +240,44 @@ const ServicesPage = () => (
           title: "Residential Moving", 
           desc: "Complete home packing, moving, and re-assembly. Includes wardrobe boxes and foam cornering for furniture.", 
           icon: <Home />,
-          img: "https://images.unsplash.com/photo-1617104424032-b9bd6972d0e4"
+          img: "https://images.unsplash.com/photo-1617104424032-b9bd6972d0e4",
+          features: ["Premium Packaging", "Insurance Included", "Live Tracking"]
+        },
+        { 
+          title: "Office & System Relocation", 
+          desc: "We understand confidentiality. Our team minimizes downtime with secure file handling and expert system disassembly to ensure your business is back online instantly.", 
+          icon: <Briefcase />,
+          img: "https://images.unsplash.com/photo-1497366811353-6870744d04b2",
+          features: ["Secure File Handling", "System Expertise", "Minimized Downtime"]
+        },
+        { 
+          title: "Bank & Heavy Logistics", 
+          desc: "Specialized equipment for heavy furniture and ATMs. We prioritize safety first, using expert handling techniques for high-value and bulky assets.", 
+          icon: <Landmark />,
+          img: "https://plus.unsplash.com/premium_photo-1661319063327-ccb1da3003a4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YmFua3xlbnwwfHwwfHx8MA%3D%3D",
+          features: ["Expert Handling", "Specialized Equipment", "Safety First"]
         },
         { 
           title: "Vehicle Transport", 
           desc: "Enclosed hydraulic carriers for luxury cars and bikes. Zero-scratch guarantee with GPS tracking.", 
           icon: <Truck />,
-          img: "https://images.unsplash.com/photo-1725429976920-492648a26ac7?w=600"
+          img: "https://images.unsplash.com/photo-1725429976920-492648a26ac7?w=600",
+          features: ["Enclosed Carriers", "Zero Scratch", "GPS Tracking"]
         },
-        { 
-          title: "Corporate Relocation", 
-          desc: "Zero-downtime office moves. We handle server racks, IT assets, and confidential files overnight.", 
-          icon: <Zap />,
-          img: "https://images.unsplash.com/photo-1497366811353-6870744d04b2"
+        {
+          title: "Premium Home Cleaning",
+          desc: "Post-move deep cleaning services to ensure your new space is pristine. We handle the mess so you can settle in immediately.",
+          icon: <Sparkles />,
+          img: "https://images.unsplash.com/photo-1713110824336-f78c320dcf8e?w=500&auto=format&fit=crop&q=60",
+          features: ["Deep Cleaning", "Eco-Friendly", "Move-In Ready"]
         }
       ].map((s, i) => (
-        <div key={i} className={`flex flex-col lg:flex-row gap-12 lg:gap-20 items-center group animate-enter`} style={{ animationDelay: `${i*100}ms` }}>
-           <div className={`w-full lg:w-1/2 relative h-[300px] md:h-125 rounded-3xl overflow-hidden border border-white/5 ${i % 2 === 1 ? 'lg:order-2' : ''}`}>
+        // FIXED: Zig-Zag Layout (Left/Right alternating)
+        // 'lg:flex-row-reverse' flips the order for odd items (1, 3, 5)
+        <div key={i} className={`flex flex-col lg:flex-row ${i % 2 === 1 ? 'lg:flex-row-reverse' : ''} gap-12 lg:gap-24 items-center group animate-enter`} style={{ animationDelay: `${i*100}ms` }}>
+           
+           {/* Image Container */}
+           <div className="w-full lg:w-1/2 relative h-[300px] md:h-[400px] rounded-3xl overflow-hidden border border-white/5">
               <img src={s.img} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" alt={s.title} loading="lazy" />
               <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 bg-black/80 backdrop-blur-md p-4 rounded-xl border border-white/10">
                  <div className="w-10 h-10 md:w-12 md:h-12 bg-[#fbbf24] rounded-lg flex items-center justify-center text-black">
@@ -263,13 +286,14 @@ const ServicesPage = () => (
               </div>
            </div>
 
-           <div className={`w-full lg:w-1/2 ${i % 2 === 1 ? 'lg:text-right' : ''}`}>
-              <h3 className="text-3xl md:text-4xl font-bold text-white mb-4 md:mb-6 group-hover:text-[#fbbf24] transition-colors">{s.title}</h3>
-              <p className="text-lg md:text-xl text-gray-400 leading-relaxed mb-8 md:mb-10">{s.desc}</p>
-              <ul className={`space-y-4 ${i % 2 === 1 ? 'flex flex-col items-end' : ''}`}>
-                 {['Premium Packaging', 'Insurance Included', 'Live Tracking'].map((feat, idx) => (
+           {/* Text Content - Always Left Aligned (even when on the right side) */}
+           <div className="w-full lg:w-1/2 text-left">
+              <h3 className="text-3xl md:text-5xl font-bold text-white mb-4 md:mb-6 group-hover:text-[#fbbf24] transition-colors">{s.title}</h3>
+              <p className="text-lg md:text-xl text-gray-400 leading-relaxed mb-8 md:mb-10 max-w-lg">{s.desc}</p>
+              <ul className="space-y-4">
+                 {s.features.map((feat, idx) => (
                     <li key={idx} className="flex items-center gap-4 text-sm md:text-base font-bold text-gray-300">
-                       <CheckCircle className="w-5 h-5 text-[#fbbf24]" /> {feat}
+                       <CheckCircle className="w-5 h-5 text-[#fbbf24] shrink-0" /> {feat}
                     </li>
                  ))}
               </ul>
@@ -331,6 +355,7 @@ const ProcessPage = () => {
   );
 };
 
+// --- ABOUT PAGE: "FROSTED GLASS ISLAND" CARDS (VERSION 28.0) ---
 const AboutPage = () => (
   <div className="section-padding container mx-auto px-6">
      <div className="grid lg:grid-cols-12 gap-16 items-center mb-40">
@@ -390,104 +415,105 @@ const AboutPage = () => (
              img: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80" 
            }
         ].map((item, i) => (
-           <SpotlightCard key={i} className="p-0 overflow-hidden group border-0 relative h-[500px]">
+           <div key={i} className="group relative h-[500px] w-full rounded-[2rem] overflow-hidden bg-[#0a0a0a] border border-white/5">
               <img 
                 src={item.img} 
-                className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-110 group-hover:scale-100" 
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0" 
                 alt={item.title} 
               />
-              <div className="absolute inset-0 bg-black/60 group-hover:bg-black/30 transition-colors duration-500"></div>
-              <div className="absolute inset-0 p-10 flex flex-col justify-end">
-                 <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                    <p className="text-[#fbbf24] text-xs uppercase tracking-[0.3em] font-bold mb-3">{item.role}</p>
-                    <h4 className="text-3xl font-black text-white mb-4">{item.title}</h4>
-                    <p className="text-gray-300 text-sm leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+              <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500"></div>
+              <div className="absolute bottom-0 w-full p-4">
+                 <div className="w-full bg-black/40 backdrop-blur-xl border border-white/10 rounded-[1.5rem] p-6 shadow-2xl transform transition-transform duration-500 hover:scale-[1.02]">
+                    <p className="text-[#fbbf24] text-[10px] uppercase tracking-[0.25em] font-bold mb-3">{item.role}</p>
+                    <h4 className="text-2xl font-black text-white mb-2">{item.title}</h4>
+                    <p className="text-gray-300 text-sm leading-relaxed">
                        {item.desc}
                     </p>
                  </div>
               </div>
-           </SpotlightCard>
+           </div>
         ))}
      </div>
   </div>
 );
 
-// --- FIXED MOBILE CONTACT PAGE ---
+// --- CONTACT PAGE (GRAND & EXPANSIVE) ---
 const ContactPage = () => (
-  <div className="h-screen w-full flex items-center justify-center relative overflow-hidden pt-10"> 
+  // 1. Full Screen Layout (No Scroll)
+  <div className="h-screen w-full flex items-center justify-center relative overflow-hidden pt-20"> 
      <div className="container mx-auto px-4 lg:px-6">
-        <div className="w-full max-w-5xl mx-auto grid lg:grid-cols-2 gap-8 lg:gap-24 items-center animate-enter">
+        {/* 2. Grand Width (7xl) */}
+        <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-24 items-center animate-enter">
            
-           {/* Mobile Heading (Visible now!) */}
-           <div className="lg:hidden text-center mb-2">
+           <div className="lg:hidden text-center mb-6">
               <h2 className="text-4xl font-black text-white mb-2 leading-none">
                  LET'S <br/> <span className="text-[#fbbf24]">MOVE.</span>
               </h2>
               <p className="text-sm text-gray-400">Precision quote in 2 hours.</p>
            </div>
 
-           {/* Desktop Left Side */}
            <div className="hidden lg:flex flex-col justify-center">
-              <h2 className="text-6xl font-black text-white mb-6 leading-[0.9]">
+              <h2 className="text-7xl xl:text-8xl font-black text-white mb-8 leading-[0.9]">
                  LET'S <br/> <span className="text-[#fbbf24]">MOVE.</span>
               </h2>
-              <p className="text-lg text-gray-400 mb-8 leading-relaxed max-w-md">
+              <p className="text-xl text-gray-400 mb-12 leading-relaxed max-w-lg">
                  Ready for the smoothest move? Fill out the form for a precision quote in 2 hours.
               </p>
               
-              <div className="space-y-6">
+              <div className="space-y-8">
                  <div className="flex items-center gap-6">
-                    <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-[#fbbf24]">
-                       <Phone className="w-5 h-5" />
+                    <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center text-[#fbbf24]">
+                       <Phone className="w-6 h-6" />
                     </div>
                     <div>
                        <p className="text-xs text-gray-500 font-bold uppercase mb-1">Call Us</p>
-                       <p className="text-xl font-bold text-white">+91 98765 43210</p>
+                       <p className="text-2xl font-bold text-white">+91 98765 43210</p>
                     </div>
                  </div>
                  <div className="flex items-center gap-6">
-                    <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-[#fbbf24]">
-                       <Globe className="w-5 h-5" />
+                    <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center text-[#fbbf24]">
+                       <Globe className="w-6 h-6" />
                     </div>
                     <div>
                        <p className="text-xs text-gray-500 font-bold uppercase mb-1">Email</p>
-                       <p className="text-xl font-bold text-white">hello@safeguard.in</p>
+                       <p className="text-2xl font-bold text-white">hello@safeguard.in</p>
                     </div>
                  </div>
               </div>
            </div>
 
-           {/* Right Side: COMPACT FORM */}
-           <div className="bg-[#0a0a0a] p-5 md:p-8 rounded-2xl border border-white/10 shadow-2xl relative w-full max-w-md mx-auto">
-              <form className="space-y-3">
-                 <div className="grid grid-cols-2 gap-3">
-                    <div>
-                       <label className="text-[9px] text-gray-500 font-bold uppercase mb-1 block ml-1">Name</label>
-                       <input className="w-full bg-white/5 border border-white/10 p-2.5 rounded-lg text-white focus:border-[#fbbf24] outline-none transition-colors text-sm" placeholder="John" />
+           {/* Grand Form (Expanded Height & Padding) */}
+           <div className="bg-[#0a0a0a] p-6 md:p-12 rounded-[2.5rem] border border-white/10 shadow-2xl relative w-full mx-auto">
+              <form className="space-y-4 md:space-y-6"> 
+                 <div className="grid grid-cols-2 gap-4 md:gap-6">
+                    <div className="group">
+                       <label className="text-[10px] md:text-xs text-gray-500 font-bold uppercase mb-2 block ml-1 transition-colors group-focus-within:text-[#fbbf24]">Name</label>
+                       {/* Height increased to h-14 */}
+                       <input className="w-full bg-white/5 border border-white/10 p-3 md:p-4 h-12 md:h-14 rounded-xl text-white focus:border-[#fbbf24] outline-none transition-all text-sm md:text-base" placeholder="John Doe" />
                     </div>
-                    <div>
-                       <label className="text-[9px] text-gray-500 font-bold uppercase mb-1 block ml-1">Phone</label>
-                       <input className="w-full bg-white/5 border border-white/10 p-2.5 rounded-lg text-white focus:border-[#fbbf24] outline-none transition-colors text-sm" placeholder="+91..." />
+                    <div className="group">
+                       <label className="text-[10px] md:text-xs text-gray-500 font-bold uppercase mb-2 block ml-1 transition-colors group-focus-within:text-[#fbbf24]">Phone</label>
+                       <input className="w-full bg-white/5 border border-white/10 p-3 md:p-4 h-12 md:h-14 rounded-xl text-white focus:border-[#fbbf24] outline-none transition-all text-sm md:text-base" placeholder="+91..." />
                     </div>
                  </div>
                  
-                 <div className="grid grid-cols-2 gap-3">
-                    <div>
-                       <label className="text-[9px] text-gray-500 font-bold uppercase mb-1 block ml-1">From</label>
-                       <input className="w-full bg-white/5 border border-white/10 p-2.5 rounded-lg text-white focus:border-[#fbbf24] outline-none transition-colors text-sm" placeholder="City A" />
+                 <div className="grid grid-cols-2 gap-4 md:gap-6">
+                    <div className="group">
+                       <label className="text-[10px] md:text-xs text-gray-500 font-bold uppercase mb-2 block ml-1 transition-colors group-focus-within:text-[#fbbf24]">From</label>
+                       <input className="w-full bg-white/5 border border-white/10 p-3 md:p-4 h-12 md:h-14 rounded-xl text-white focus:border-[#fbbf24] outline-none transition-all text-sm md:text-base" placeholder="Origin City" />
                     </div>
-                    <div>
-                       <label className="text-[9px] text-gray-500 font-bold uppercase mb-1 block ml-1">To</label>
-                       <input className="w-full bg-white/5 border border-white/10 p-2.5 rounded-lg text-white focus:border-[#fbbf24] outline-none transition-colors text-sm" placeholder="City B" />
+                    <div className="group">
+                       <label className="text-[10px] md:text-xs text-gray-500 font-bold uppercase mb-2 block ml-1 transition-colors group-focus-within:text-[#fbbf24]">To</label>
+                       <input className="w-full bg-white/5 border border-white/10 p-3 md:p-4 h-12 md:h-14 rounded-xl text-white focus:border-[#fbbf24] outline-none transition-all text-sm md:text-base" placeholder="Destination City" />
                     </div>
                  </div>
 
-                 <div>
-                    <label className="text-[9px] text-gray-500 font-bold uppercase mb-1 block ml-1">Details</label>
-                    <textarea className="w-full bg-white/5 border border-white/10 p-2.5 rounded-lg h-16 md:h-24 resize-none text-white focus:border-[#fbbf24] outline-none transition-colors text-sm" placeholder="List items..."></textarea>
+                 <div className="group">
+                    <label className="text-[10px] md:text-xs text-gray-500 font-bold uppercase mb-2 block ml-1 transition-colors group-focus-within:text-[#fbbf24]">Inventory Details</label>
+                    <textarea className="w-full bg-white/5 border border-white/10 p-3 md:p-4 rounded-xl h-20 md:h-32 resize-none text-white focus:border-[#fbbf24] outline-none transition-all text-sm md:text-base" placeholder="List key items (e.g. Piano, Server Rack)..."></textarea>
                  </div>
 
-                 <Button primary className="w-full py-3 text-xs tracking-widest">Get Quote</Button>
+                 <Button primary className="w-full py-4 md:py-5 text-xs md:text-sm tracking-widest">Request Priority Quote</Button>
               </form>
            </div>
         </div>
@@ -584,16 +610,78 @@ const App = () => {
 
       {/* FOOTER - Hidden on Contact Page to prevent scrolling */}
       {activePage !== 'contact' && (
-        <footer className="border-t border-white/5 bg-[#020617] py-20 relative z-10 mt-auto text-center overflow-hidden">
-           <h2 className="text-[18vw] font-black text-white leading-none select-none tracking-tighter opacity-5 mix-blend-overlay pointer-events-none">SAFEGUARD</h2>
-           <div className="relative z-10 mt-[-6vw]">
-              <div className="flex justify-center gap-8 mb-8 text-[10px] font-bold uppercase tracking-widest text-gray-500">
-                 <span className="hover:text-[#fbbf24] cursor-pointer transition-colors">Privacy Policy</span>
-                 <span className="hover:text-[#fbbf24] cursor-pointer transition-colors">Terms of Service</span>
-                 <span className="hover:text-[#fbbf24] cursor-pointer transition-colors">Sitemap</span>
-              </div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-gray-700">© 2026 SafeGuard Logistics. Excellence Delivered.</p>
-           </div>
+        <footer className="relative z-10 pt-24 pb-12 overflow-hidden border-t border-white/5">
+            {/* Subtler Giant Text Background */}
+             <h2 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[25vw] font-black text-white leading-none select-none tracking-tighter opacity-[0.02] mix-blend-overlay pointer-events-none">SAFEGUARD</h2>
+
+            <div className="container mx-auto px-6 relative z-10">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
+                    {/* Col 1: Brand */}
+                    <div className="md:col-span-4 animate-enter">
+                        <div className="flex items-center gap-3 mb-6 group cursor-pointer" onClick={() => navigateTo('home')}>
+                             <div className="relative w-8 h-8 flex items-center justify-center">
+                                <Shield className="w-full h-full text-[#fbbf24] fill-[#fbbf24] transition-transform group-hover:scale-110" />
+                                <Home className="w-3 h-3 text-black absolute z-10 mb-0.5" />
+                             </div>
+                             <span className="text-xl font-black tracking-tighter text-white">SAFE<span className="text-[#fbbf24]">GUARD</span></span>
+                        </div>
+                        <p className="text-gray-400 text-sm leading-relaxed max-w-sm mb-8">
+                            Redefining logistics with military-grade precision and white-glove care. Your assets, our mission.
+                        </p>
+                    </div>
+
+                    {/* Col 2: Quick Links */}
+                    <div className="md:col-span-2 md:col-start-6 animate-enter delay-100">
+                         <h4 className="text-white font-bold uppercase tracking-widest text-xs mb-6">Company</h4>
+                         <ul className="space-y-3">
+                            {links.map(link => (
+                                <li key={link}>
+                                    <button onClick={() => navigateTo(link)} className="text-gray-400 hover:text-[#fbbf24] transition-colors text-sm capitalize">{link}</button>
+                                </li>
+                            ))}
+                         </ul>
+                    </div>
+
+                    {/* Col 3: Services */}
+                    <div className="md:col-span-3 animate-enter delay-200">
+                        <h4 className="text-white font-bold uppercase tracking-widest text-xs mb-6">Expertise</h4>
+                        <ul className="space-y-3">
+                            {['Residential Moving', 'Office Relocation', 'High-Value & Banks', 'Vehicle Transport', 'Premium Cleaning'].map(link => (
+                                <li key={link}><a href="#" className="text-gray-400 hover:text-[#fbbf24] transition-colors text-sm">{link}</a></li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {/* Col 4: Contact */}
+                    <div className="md:col-span-3 animate-enter delay-300">
+                        <h4 className="text-white font-bold uppercase tracking-widest text-xs mb-6">Contact</h4>
+                         <ul className="space-y-4">
+                            <li className="flex items-start gap-3 text-gray-400 text-sm group">
+                                <MapPin className="w-5 h-5 text-[#fbbf24] shrink-0 group-hover:scale-110 transition-transform" />
+                                <span>123 Prestige Tower, Financial District, Mumbai, India</span>
+                            </li>
+                            <li className="flex items-center gap-3 text-gray-400 text-sm group">
+                                <Phone className="w-5 h-5 text-[#fbbf24] shrink-0 group-hover:scale-110 transition-transform" />
+                                <span>+91 98765 43210</span>
+                            </li>
+                            <li className="flex items-center gap-3 text-gray-400 text-sm group">
+                                <Mail className="w-5 h-5 text-[#fbbf24] shrink-0 group-hover:scale-110 transition-transform" />
+                                <span>hello@safeguard.in</span>
+                            </li>
+                         </ul>
+                    </div>
+                </div>
+
+                {/* Bottom Section */}
+                <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 animate-enter delay-500">
+                    <p className="text-gray-500 text-xs uppercase tracking-widest font-bold">© 2026 SafeGuard Logistics. All rights reserved.</p>
+                     <div className="flex gap-6 text-gray-500 text-xs uppercase tracking-widest font-bold">
+                        <a href="#" className="hover:text-[#fbbf24] transition-colors">Privacy</a>
+                        <a href="#" className="hover:text-[#fbbf24] transition-colors">Terms</a>
+                        <a href="#" className="hover:text-[#fbbf24] transition-colors">Sitemap</a>
+                    </div>
+                </div>
+            </div>
         </footer>
       )}
     </div>

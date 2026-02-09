@@ -98,7 +98,8 @@ const InfiniteMarquee = () => {
   ];
 
   return (
-    <div className="w-full py-8 md:py-12 overflow-hidden relative z-20 marquee-mask group">
+    // FIXED: Reduced padding on mobile (py-6) to tighten gap with hero buttons
+    <div className="w-full py-6 md:py-12 overflow-hidden relative z-20 marquee-mask group">
       <div className="flex animate-scroll group-hover:[animation-play-state:paused]">
         <div className="flex gap-16 md:gap-32 px-10 shrink-0">
           {items.map((item, i) => (
@@ -119,12 +120,78 @@ const InfiniteMarquee = () => {
   );
 };
 
+// --- SMART COMPONENT: Service Card (Handles Scroll Focus) ---
+const ServiceCard = ({ s, i }) => {
+  const ref = useRef(null);
+  const [isInView, setIsInView] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      { threshold: 0.4, rootMargin: "-10% 0px -10% 0px" } 
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => {
+      if (ref.current) observer.unobserve(ref.current);
+    };
+  }, []);
+
+  return (
+    <div 
+      ref={ref}
+      className={`flex flex-col lg:flex-row ${i % 2 === 1 ? 'lg:flex-row-reverse' : ''} gap-12 lg:gap-24 items-center group animate-enter`} 
+      style={{ animationDelay: `${i*100}ms` }}
+    >
+       {/* Image Container */}
+       <div className="w-full lg:w-1/2 relative h-[300px] md:h-[400px] rounded-3xl overflow-hidden border border-white/5">
+          <img 
+            src={s.img} 
+            className={cn(
+              "w-full h-full object-cover transition-all duration-700",
+              // Mobile: Scroll Focus | Desktop: Hover Focus
+              isInView ? "grayscale-0 scale-105" : "grayscale group-hover:grayscale-0 group-hover:scale-105"
+            )}
+            alt={s.title} 
+            loading="lazy" 
+            decoding="async" 
+          />
+          <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 bg-black/80 backdrop-blur-md p-4 rounded-xl border border-white/10">
+             <div className="w-10 h-10 md:w-12 md:h-12 bg-[#fbbf24] rounded-lg flex items-center justify-center text-black">
+                {s.icon}
+             </div>
+          </div>
+       </div>
+
+       {/* Text Content */}
+       <div className="w-full lg:w-1/2 text-left">
+          <h3 className={cn(
+            "text-3xl md:text-5xl font-bold text-white mb-4 md:mb-6 transition-colors",
+            isInView ? "text-[#fbbf24]" : "group-hover:text-[#fbbf24]"
+          )}>
+            {s.title}
+          </h3>
+          <p className="text-lg md:text-xl text-gray-400 leading-relaxed mb-8 md:mb-10 max-w-lg">{s.desc}</p>
+          <ul className="space-y-4">
+             {s.features.map((feat, idx) => (
+                <li key={idx} className="flex items-center gap-4 text-sm md:text-base font-bold text-gray-300">
+                   <CheckCircle className="w-5 h-5 text-[#fbbf24] shrink-0" /> {feat}
+                </li>
+             ))}
+          </ul>
+       </div>
+    </div>
+  );
+};
+
 // --- PAGES ---
 
 const HomePage = ({ setPage }) => (
   <div className="w-full">
     {/* HERO */}
-    <section className="relative min-h-screen flex items-center pt-24 pb-16 md:pt-32 md:pb-20 overflow-hidden">
+    {/* FIXED: Removed min-h-screen on mobile, adjusted padding to remove gap below buttons */}
+    <section className="relative flex items-center pt-32 pb-12 md:min-h-screen md:pt-32 md:pb-20 overflow-hidden">
       <div className="container mx-auto px-6 relative z-10 grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
         <div className="lg:col-span-7 animate-enter text-center lg:text-left">
           <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-8">
@@ -149,7 +216,7 @@ const HomePage = ({ setPage }) => (
         <div className="lg:col-span-5 hidden lg:block relative h-175 animate-enter" style={{ animationDelay: '0.2s' }}>
            <SpotlightCard className="h-full w-full p-0 border-0 group shadow-2xl">
               <img 
-                src="https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&q=80" 
+                src="https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=600&q=60" 
                 className="w-full h-full object-cover opacity-80 grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-105"
                 alt="Logistics"
                 loading="eager"
@@ -211,107 +278,84 @@ const HomePage = ({ setPage }) => (
   </div>
 );
 
-// --- UPDATED SERVICES PAGE: ZIG-ZAG LAYOUT + LEFT ALIGNED TEXT ---
-const ServicesPage = () => (
-  <div className="section-padding container mx-auto px-6">
-    <SectionHeader 
-      label="Our Expertise" 
-      title="Comprehensive Capabilities." 
-      subtitle="From delicate heirlooms to heavy bank vaults, we have a protocol for every asset class." 
-    />
-    
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-24 md:mb-32">
-       {[
-          { icon: <Home />, label: "Home" },
-          { icon: <Briefcase />, label: "Office" },
-          { icon: <Landmark />, label: "Banks" },
-          { icon: <Sparkles />, label: "Cleaning" }
-       ].map((item, i) => (
-          <div key={i} className="p-6 md:p-8 rounded-2xl border border-white/5 bg-[#0a0a0a] flex flex-col items-center justify-center gap-4 hover:border-[#fbbf24] transition-colors cursor-pointer group">
-             <div className="text-gray-400 group-hover:text-[#fbbf24] transition-colors scale-125">{item.icon}</div>
-             <span className="text-xs md:text-sm font-bold text-white uppercase tracking-wider">{item.label}</span>
-          </div>
-       ))}
-    </div>
+const ServicesPage = () => {
+  const services = [
+    { 
+      title: "Residential Moving", 
+      desc: "Complete home packing, moving, and re-assembly. Includes wardrobe boxes and foam cornering for furniture.", 
+      icon: <Home />,
+      img: "https://images.unsplash.com/photo-1617104424032-b9bd6972d0e4?auto=format&fit=crop&w=600&q=60",
+      features: ["Premium Packaging", "Insurance Included", "Live Tracking"]
+    },
+    { 
+      title: "Office & System Relocation", 
+      desc: "We understand confidentiality. Our team minimizes downtime with secure file handling and expert system disassembly to ensure your business is back online instantly.", 
+      icon: <Briefcase />,
+      img: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=600&q=60",
+      features: ["Secure File Handling", "System Expertise", "Minimized Downtime"]
+    },
+    { 
+      title: "Bank & Heavy Logistics", 
+      desc: "Specialized equipment for heavy furniture and ATMs. We prioritize safety first, using expert handling techniques for high-value and bulky assets.", 
+      icon: <Landmark />,
+      img: "https://plus.unsplash.com/premium_photo-1661319063327-ccb1da3003a4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YmFua3xlbnwwfHwwfHx8MA%3D%3D",
+      features: ["Expert Handling", "Specialized Equipment", "Safety First"]
+    },
+    { 
+      title: "Vehicle Transport", 
+      desc: "Enclosed hydraulic carriers for luxury cars and bikes. Zero-scratch guarantee with GPS tracking.", 
+      icon: <Truck />,
+      img: "https://images.unsplash.com/photo-1725429976920-492648a26ac7?w=600&auto=format&fit=crop&q=60",
+      features: ["Enclosed Carriers", "Zero Scratch", "GPS Tracking"]
+    },
+    {
+      title: "Premium Home Cleaning",
+      desc: "Post-move deep cleaning services to ensure your new space is pristine. We handle the mess so you can settle in immediately.",
+      icon: <Sparkles />,
+      img: "https://images.unsplash.com/photo-1713110824336-f78c320dcf8e?w=600&auto=format&fit=crop&q=60",
+      features: ["Deep Cleaning", "Eco-Friendly", "Move-In Ready"]
+    }
+  ];
 
-    <div className="space-y-24 md:space-y-32">
-      {[
-        { 
-          title: "Residential Moving", 
-          desc: "Complete home packing, moving, and re-assembly. Includes wardrobe boxes and foam cornering for furniture.", 
-          icon: <Home />,
-          img: "https://images.unsplash.com/photo-1617104424032-b9bd6972d0e4",
-          features: ["Premium Packaging", "Insurance Included", "Live Tracking"]
-        },
-        { 
-          title: "Office & System Relocation", 
-          desc: "We understand confidentiality. Our team minimizes downtime with secure file handling and expert system disassembly to ensure your business is back online instantly.", 
-          icon: <Briefcase />,
-          img: "https://images.unsplash.com/photo-1497366811353-6870744d04b2",
-          features: ["Secure File Handling", "System Expertise", "Minimized Downtime"]
-        },
-        { 
-          title: "Bank & Heavy Logistics", 
-          desc: "Specialized equipment for heavy furniture and ATMs. We prioritize safety first, using expert handling techniques for high-value and bulky assets.", 
-          icon: <Landmark />,
-          img: "https://plus.unsplash.com/premium_photo-1661319063327-ccb1da3003a4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YmFua3xlbnwwfHwwfHx8MA%3D%3D",
-          features: ["Expert Handling", "Specialized Equipment", "Safety First"]
-        },
-        { 
-          title: "Vehicle Transport", 
-          desc: "Enclosed hydraulic carriers for luxury cars and bikes. Zero-scratch guarantee with GPS tracking.", 
-          icon: <Truck />,
-          img: "https://images.unsplash.com/photo-1725429976920-492648a26ac7?w=600",
-          features: ["Enclosed Carriers", "Zero Scratch", "GPS Tracking"]
-        },
-        {
-          title: "Premium Home Cleaning",
-          desc: "Post-move deep cleaning services to ensure your new space is pristine. We handle the mess so you can settle in immediately.",
-          icon: <Sparkles />,
-          img: "https://images.unsplash.com/photo-1713110824336-f78c320dcf8e?w=500&auto=format&fit=crop&q=60",
-          features: ["Deep Cleaning", "Eco-Friendly", "Move-In Ready"]
-        }
-      ].map((s, i) => (
-        // FIXED: Zig-Zag Layout (Left/Right alternating)
-        // 'lg:flex-row-reverse' flips the order for odd items (1, 3, 5)
-        <div key={i} className={`flex flex-col lg:flex-row ${i % 2 === 1 ? 'lg:flex-row-reverse' : ''} gap-12 lg:gap-24 items-center group animate-enter`} style={{ animationDelay: `${i*100}ms` }}>
-           
-           {/* Image Container */}
-           <div className="w-full lg:w-1/2 relative h-[300px] md:h-[400px] rounded-3xl overflow-hidden border border-white/5">
-              <img src={s.img} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" alt={s.title} loading="lazy" />
-              <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 bg-black/80 backdrop-blur-md p-4 rounded-xl border border-white/10">
-                 <div className="w-10 h-10 md:w-12 md:h-12 bg-[#fbbf24] rounded-lg flex items-center justify-center text-black">
-                    {s.icon}
-                 </div>
-              </div>
-           </div>
+  return (
+    <div className="section-padding container mx-auto px-6">
+      <SectionHeader 
+        label="Our Expertise" 
+        title="Comprehensive Capabilities." 
+        subtitle="From delicate heirlooms to heavy bank vaults, we have a protocol for every asset class." 
+      />
+      
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-24 md:mb-32">
+         {[
+            { icon: <Home />, label: "Home" },
+            { icon: <Briefcase />, label: "Office" },
+            { icon: <Landmark />, label: "Banks" },
+            { icon: <Sparkles />, label: "Cleaning" }
+         ].map((item, i) => (
+            <div key={i} className="p-6 md:p-8 rounded-2xl border border-white/5 bg-[#0a0a0a] flex flex-col items-center justify-center gap-4 hover:border-[#fbbf24] transition-colors cursor-pointer group">
+               <div className="text-gray-400 group-hover:text-[#fbbf24] transition-colors scale-125">{item.icon}</div>
+               <span className="text-xs md:text-sm font-bold text-white uppercase tracking-wider">{item.label}</span>
+            </div>
+         ))}
+      </div>
 
-           {/* Text Content - Always Left Aligned (even when on the right side) */}
-           <div className="w-full lg:w-1/2 text-left">
-              <h3 className="text-3xl md:text-5xl font-bold text-white mb-4 md:mb-6 group-hover:text-[#fbbf24] transition-colors">{s.title}</h3>
-              <p className="text-lg md:text-xl text-gray-400 leading-relaxed mb-8 md:mb-10 max-w-lg">{s.desc}</p>
-              <ul className="space-y-4">
-                 {s.features.map((feat, idx) => (
-                    <li key={idx} className="flex items-center gap-4 text-sm md:text-base font-bold text-gray-300">
-                       <CheckCircle className="w-5 h-5 text-[#fbbf24] shrink-0" /> {feat}
-                    </li>
-                 ))}
-              </ul>
-           </div>
-        </div>
-      ))}
+      <div className="space-y-24 md:space-y-32">
+        {services.map((s, i) => (
+           <ServiceCard key={i} s={s} i={i} />
+        ))}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const ProcessPage = () => {
   const [activeStep, setActiveStep] = useState(0);
   
   const steps = [
-    { title: "Consultation", desc: "Video survey or onsite visit to inventory items. Instant quote generation.", img: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7" },
-    { title: "Packing Day", desc: "Team arrives with color-coded boxes. Fragile items get 3-layer protection.", img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c" },
-    { title: "Secure Transit", desc: "Goods loaded into GPS-enabled closed containers. Live tracking link provided.", img: "https://images.unsplash.com/photo-1604357209793-fca5dca89f97?w=600" },
-    { title: "The Unboxing", desc: "We unload, assemble furniture, and remove all debris before leaving.", img: "https://images.unsplash.com/photo-1497366811353-6870744d04b2" }
+    { title: "Consultation", desc: "Video survey or onsite visit to inventory items. Instant quote generation.", img: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=600&q=60" },
+    { title: "Packing Day", desc: "Team arrives with color-coded boxes. Fragile items get 3-layer protection.", img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=60" },
+    { title: "Secure Transit", desc: "Goods loaded into GPS-enabled closed containers. Live tracking link provided.", img: "https://images.unsplash.com/photo-1604357209793-fca5dca89f97?w=600&auto=format&fit=crop&q=60" },
+    { title: "The Unboxing", desc: "We unload, assemble furniture, and remove all debris before leaving.", img: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=600&q=60" }
   ];
 
   return (
@@ -342,6 +386,8 @@ const ProcessPage = () => {
                  src={step.img} 
                  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${activeStep === i ? 'opacity-100' : 'opacity-0'}`}
                  alt={step.title}
+                 loading="lazy"
+                 decoding="async"
                />
             ))}
             <div className="absolute inset-0 bg-linear-to-t from-black/90 to-transparent"></div>
@@ -355,7 +401,7 @@ const ProcessPage = () => {
   );
 };
 
-// --- ABOUT PAGE: "FROSTED GLASS ISLAND" CARDS (VERSION 28.0) ---
+// --- ABOUT PAGE: OPTIMIZED IMAGES ---
 const AboutPage = () => (
   <div className="section-padding container mx-auto px-6">
      <div className="grid lg:grid-cols-12 gap-16 items-center mb-40">
@@ -383,7 +429,13 @@ const AboutPage = () => (
         <div className="lg:col-span-5 relative animate-enter delay-200 h-[400px] md:h-150">
            <div className="absolute inset-0 bg-[#fbbf24] rounded-full blur-[120px] opacity-10 pointer-events-none"></div>
            <div className="relative h-full w-full rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-700">
-              <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7" className="h-full w-full object-cover grayscale" alt="Team" />
+              <img 
+                src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=600&q=60" 
+                className="h-full w-full object-cover grayscale" 
+                alt="Team" 
+                loading="lazy" 
+                decoding="async" 
+              />
               <div className="absolute bottom-0 w-full p-10 bg-linear-to-t from-black via-black/80 to-transparent">
                  <Quote className="w-12 h-12 text-[#fbbf24] mb-4" />
                  <p className="text-white text-lg italic font-medium">"Excellence is not an act, but a habit."</p>
@@ -400,19 +452,19 @@ const AboutPage = () => (
              role: "The Hands", 
              title: "Master Packers", 
              desc: "Certified in fragile handling. They don't just pack; they preserve.",
-             img: "https://images.unsplash.com/photo-1534972195531-d756b9bfa9f2?auto=format&fit=crop&q=80" 
+             img: "https://images.unsplash.com/photo-1534972195531-d756b9bfa9f2?auto=format&fit=crop&w=600&q=60" 
            },
            { 
              role: "The Eyes", 
              title: "Route Command", 
              desc: "24/7 monitoring center ensuring your shipment never goes off-grid.",
-             img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80" 
+             img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=60" 
            },
            { 
              role: "The Shield", 
              title: "Safety Fleet", 
              desc: "Air-ride suspension trucks that eliminate road vibration.",
-             img: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80" 
+             img: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=600&q=60" 
            }
         ].map((item, i) => (
            <div key={i} className="group relative h-[500px] w-full rounded-[2rem] overflow-hidden bg-[#0a0a0a] border border-white/5">
@@ -420,6 +472,8 @@ const AboutPage = () => (
                 src={item.img} 
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0" 
                 alt={item.title} 
+                loading="lazy" 
+                decoding="async" 
               />
               <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500"></div>
               <div className="absolute bottom-0 w-full p-4">
@@ -437,12 +491,9 @@ const AboutPage = () => (
   </div>
 );
 
-// --- CONTACT PAGE (GRAND & EXPANSIVE) ---
 const ContactPage = () => (
-  // 1. Full Screen Layout (No Scroll)
   <div className="h-screen w-full flex items-center justify-center relative overflow-hidden pt-20"> 
      <div className="container mx-auto px-4 lg:px-6">
-        {/* 2. Grand Width (7xl) */}
         <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-24 items-center animate-enter">
            
            <div className="lg:hidden text-center mb-6">
@@ -482,13 +533,11 @@ const ContactPage = () => (
               </div>
            </div>
 
-           {/* Grand Form (Expanded Height & Padding) */}
            <div className="bg-[#0a0a0a] p-6 md:p-12 rounded-[2.5rem] border border-white/10 shadow-2xl relative w-full mx-auto">
               <form className="space-y-4 md:space-y-6"> 
                  <div className="grid grid-cols-2 gap-4 md:gap-6">
                     <div className="group">
                        <label className="text-[10px] md:text-xs text-gray-500 font-bold uppercase mb-2 block ml-1 transition-colors group-focus-within:text-[#fbbf24]">Name</label>
-                       {/* Height increased to h-14 */}
                        <input className="w-full bg-white/5 border border-white/10 p-3 md:p-4 h-12 md:h-14 rounded-xl text-white focus:border-[#fbbf24] outline-none transition-all text-sm md:text-base" placeholder="John Doe" />
                     </div>
                     <div className="group">
@@ -580,6 +629,7 @@ const App = () => {
         </div>
       </nav>
 
+      {/* FIXED MOBILE MENU (Version 33.0 - Clean & Minimalist) */}
       <div className={`fixed inset-0 z-40 bg-black transition-all duration-700 ease-[cubic-bezier(0.76,0,0.24,1)] ${menuOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}>
          <div className="h-full flex flex-col items-center justify-center gap-10 relative overflow-hidden">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#fbbf24] opacity-5 blur-[150px] rounded-full pointer-events-none"></div>
@@ -587,12 +637,11 @@ const App = () => {
                <button 
                  key={link} 
                  onClick={() => navigateTo(link)}
-                 className={`text-6xl font-black uppercase tracking-tighter text-transparent stroke-white hover:text-[#fbbf24] transition-all transform ${menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}
-                 style={{ 
-                   transitionDelay: `${i * 100}ms`,
-                   WebkitTextStroke: activePage === link ? '0px' : '1px white', 
-                   color: activePage === link ? '#fbbf24' : 'transparent' 
-                 }}
+                 className={`text-3xl md:text-4xl font-bold uppercase tracking-[0.2em] transition-all duration-500 transform
+                   ${activePage === link ? 'text-[#fbbf24] scale-110' : 'text-white/30 hover:text-white'}
+                   ${menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}
+                 `}
+                 style={{ transitionDelay: `${i * 100}ms` }}
                >
                  {link}
                </button>

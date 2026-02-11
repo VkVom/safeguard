@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { 
   Shield, Truck, Phone, MapPin, Menu, X, ArrowRight, Star, 
   Box, Home, CheckCircle, Globe, Zap, Quote, Layers, Award, 
-  BarChart, Lock, Users, Server, Landmark, Briefcase, Sparkles, Mail
+  BarChart, Lock, Users, Server, Landmark, Briefcase, Sparkles, Mail, Clock
 } from 'lucide-react';
 
 // --- UTILS ---
@@ -92,13 +92,12 @@ const SectionHeader = ({ label, title, subtitle, center }) => (
 
 const InfiniteMarquee = () => {
   const items = [
-    "Premium Packaging", "Zero Damage", "Nationwide Transit", 
-    "GPS Tracking", "Insurance Included", "24/7 Support", 
-    "White Glove Service"
+    "Free Quotes", "Verified Movers", "24/7 Support", 
+    "Best Price Guarantee", "Prompt Service", "Reliable Packing", 
+    "No Hidden Fees"
   ];
 
   return (
-    // FIXED: Reduced padding on mobile (py-6) to tighten gap with hero buttons
     <div className="w-full py-6 md:py-12 overflow-hidden relative z-20 marquee-mask group">
       <div className="flex animate-scroll group-hover:[animation-play-state:paused]">
         <div className="flex gap-16 md:gap-32 px-10 shrink-0">
@@ -120,7 +119,7 @@ const InfiniteMarquee = () => {
   );
 };
 
-// --- SMART COMPONENT: Service Card (Handles Scroll Focus) ---
+// --- SMART COMPONENT: Service Card ---
 const ServiceCard = ({ s, i }) => {
   const ref = useRef(null);
   const [isInView, setIsInView] = useState(false);
@@ -130,7 +129,7 @@ const ServiceCard = ({ s, i }) => {
       ([entry]) => {
         setIsInView(entry.isIntersecting);
       },
-      { threshold: 0.4, rootMargin: "-10% 0px -10% 0px" } 
+      { threshold: 0.5, rootMargin: "-10% 0px -10% 0px" } 
     );
     if (ref.current) observer.observe(ref.current);
     return () => {
@@ -144,13 +143,11 @@ const ServiceCard = ({ s, i }) => {
       className={`flex flex-col lg:flex-row ${i % 2 === 1 ? 'lg:flex-row-reverse' : ''} gap-12 lg:gap-24 items-center group animate-enter`} 
       style={{ animationDelay: `${i*100}ms` }}
     >
-       {/* Image Container */}
        <div className="w-full lg:w-1/2 relative h-[300px] md:h-[400px] rounded-3xl overflow-hidden border border-white/5">
           <img 
             src={s.img} 
             className={cn(
               "w-full h-full object-cover transition-all duration-700",
-              // Mobile: Scroll Focus | Desktop: Hover Focus
               isInView ? "grayscale-0 scale-105" : "grayscale group-hover:grayscale-0 group-hover:scale-105"
             )}
             alt={s.title} 
@@ -164,7 +161,6 @@ const ServiceCard = ({ s, i }) => {
           </div>
        </div>
 
-       {/* Text Content */}
        <div className="w-full lg:w-1/2 text-left">
           <h3 className={cn(
             "text-3xl md:text-5xl font-bold text-white mb-4 md:mb-6 transition-colors",
@@ -190,25 +186,24 @@ const ServiceCard = ({ s, i }) => {
 const HomePage = ({ setPage }) => (
   <div className="w-full">
     {/* HERO */}
-    {/* FIXED: Removed min-h-screen on mobile, adjusted padding to remove gap below buttons */}
     <section className="relative flex items-center pt-32 pb-12 md:min-h-screen md:pt-32 md:pb-20 overflow-hidden">
       <div className="container mx-auto px-6 relative z-10 grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
         <div className="lg:col-span-7 animate-enter text-center lg:text-left">
           <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-8">
             <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_10px_#22c55e]"></span>
-            <span className="text-[10px] text-gray-300 font-bold uppercase tracking-widest">Pan-India Operations Live</span>
+            <span className="text-[10px] text-gray-300 font-bold uppercase tracking-widest">Verified & Affordable</span>
           </div>
           
           <h1 className="text-5xl sm:text-7xl lg:text-9xl font-black text-white leading-[0.95] tracking-tighter mb-8 break-words">
-            MOVE <br /> <span className="text-transparent bg-clip-text bg-linear-to-r from-[#fbbf24] to-orange-500">BEYOND</span> <br /> LIMITS.
+            LOGISTIC <br /> <span className="text-transparent bg-clip-text bg-linear-to-r from-[#fbbf24] to-orange-500">MART</span>.
           </h1>
           
           <p className="text-lg md:text-xl text-gray-400 max-w-xl mb-10 leading-relaxed mx-auto lg:mx-0 pl-0 lg:pl-6 lg:border-l-2 lg:border-[#fbbf24]/30">
-            We engineer life transitions. Experience military-grade logistics with white-glove care for your most extensive moves.
+            Professional and reliable packing and moving services. We offer prompt execution with a best price guarantee.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-            <Button primary onClick={() => setPage('contact')}>Get Custom Quote</Button>
+            <Button primary onClick={() => setPage('contact')}>Get Free Quote</Button>
             <Button onClick={() => setPage('services')}>Our Services</Button>
           </div>
         </div>
@@ -218,7 +213,7 @@ const HomePage = ({ setPage }) => (
               <img 
                 src="https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=600&q=60" 
                 className="w-full h-full object-cover opacity-80 grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-105"
-                alt="Logistics"
+                alt="LogisticMart Logistics"
                 loading="eager"
               />
               <div className="absolute bottom-10 left-10 z-20">
@@ -238,22 +233,22 @@ const HomePage = ({ setPage }) => (
     <InfiniteMarquee />
 
     <section className="section-padding container mx-auto px-6">
-       <SectionHeader label="Why SafeGuard" title="The Gold Standard." />
+       <SectionHeader label="Why LogisticMart" title="The Gold Standard." />
        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           <SpotlightCard>
              <Star className="w-10 h-10 md:w-12 md:h-12 text-[#fbbf24] mb-6 md:mb-8" />
-             <h3 className="text-xl md:text-2xl font-bold text-white mb-3 md:mb-4">On-Time Guarantee</h3>
-             <p className="text-gray-400 text-sm md:text-base leading-relaxed">We value your time. If we are late, we pay you. It's that simple.</p>
+             <h3 className="text-xl md:text-2xl font-bold text-white mb-3 md:mb-4">Best Price Guarantee</h3>
+             <p className="text-gray-400 text-sm md:text-base leading-relaxed">We provide affordable services without compromising quality. Get the best value for your move.</p>
           </SpotlightCard>
           <SpotlightCard>
-             <Lock className="w-10 h-10 md:w-12 md:h-12 text-[#fbbf24] mb-6 md:mb-8" />
-             <h3 className="text-xl md:text-2xl font-bold text-white mb-3 md:mb-4">Tamper Proof</h3>
-             <p className="text-gray-400 text-sm md:text-base leading-relaxed">Our containers use cryptographic seals. Only you can open them.</p>
+             <Clock className="w-10 h-10 md:w-12 md:h-12 text-[#fbbf24] mb-6 md:mb-8" />
+             <h3 className="text-xl md:text-2xl font-bold text-white mb-3 md:mb-4">Prompt Service</h3>
+             <p className="text-gray-400 text-sm md:text-base leading-relaxed">We respect your timeline. Our team ensures prompt and reliable packing and moving.</p>
           </SpotlightCard>
           <SpotlightCard>
              <Users className="w-10 h-10 md:w-12 md:h-12 text-[#fbbf24] mb-6 md:mb-8" />
-             <h3 className="text-xl md:text-2xl font-bold text-white mb-3 md:mb-4">Dedicated Manager</h3>
-             <p className="text-gray-400 text-sm md:text-base leading-relaxed">One point of contact. No chatbots, no waiting lines. A real human.</p>
+             <h3 className="text-xl md:text-2xl font-bold text-white mb-3 md:mb-4">24/7 Support</h3>
+             <p className="text-gray-400 text-sm md:text-base leading-relaxed">Our dedicated support team is available around the clock to answer your queries.</p>
           </SpotlightCard>
        </div>
     </section>
@@ -262,10 +257,10 @@ const HomePage = ({ setPage }) => (
        <div className="container mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-4 text-center md:text-left">
             {[
-               { val: "15k+", lbl: "Moves Completed" },
-               { val: "120+", lbl: "Cities Covered" },
-               { val: "0%", lbl: "Damage Rate" },
-               { val: "4.9", lbl: "User Rating" }
+               { val: "10k+", lbl: "Happy Customers" },
+               { val: "150+", lbl: "Cities Covered" },
+               { val: "0%", lbl: "Hidden Charges" },
+               { val: "4.8", lbl: "User Rating" }
             ].map((stat, i) => (
                <div key={i} className="flex flex-col items-center md:items-start">
                   <h3 className="text-4xl md:text-6xl font-black text-white mb-2">{stat.val}</h3>
@@ -282,31 +277,17 @@ const ServicesPage = () => {
   const services = [
     { 
       title: "Residential Moving", 
-      desc: "Complete home packing, moving, and re-assembly. Includes wardrobe boxes and foam cornering for furniture.", 
+      desc: "Complete home packing, moving, and re-assembly. We use premium packaging to ensure your household items are safe.", 
       icon: <Home />,
       img: "https://images.unsplash.com/photo-1617104424032-b9bd6972d0e4?auto=format&fit=crop&w=600&q=60",
-      features: ["Premium Packaging", "Insurance Included", "Live Tracking"]
+      features: ["Verified Movers", "Best Price Guarantee", "Prompt Service"]
     },
     { 
-      title: "Office & System Relocation", 
-      desc: "We understand confidentiality. Our team minimizes downtime with secure file handling and expert system disassembly to ensure your business is back online instantly.", 
+      title: "Office Relocation", 
+      desc: "Professional office shifting with minimal downtime. We handle secure file moving and system relocation efficiently.", 
       icon: <Briefcase />,
       img: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=600&q=60",
-      features: ["Secure File Handling", "System Expertise", "Minimized Downtime"]
-    },
-    { 
-      title: "Bank & Heavy Logistics", 
-      desc: "Specialized equipment for heavy furniture and ATMs. We prioritize safety first, using expert handling techniques for high-value and bulky assets.", 
-      icon: <Landmark />,
-      img: "https://plus.unsplash.com/premium_photo-1661319063327-ccb1da3003a4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YmFua3xlbnwwfHwwfHx8MA%3D%3D",
-      features: ["Expert Handling", "Specialized Equipment", "Safety First"]
-    },
-    { 
-      title: "Vehicle Transport", 
-      desc: "Enclosed hydraulic carriers for luxury cars and bikes. Zero-scratch guarantee with GPS tracking.", 
-      icon: <Truck />,
-      img: "https://images.unsplash.com/photo-1725429976920-492648a26ac7?w=600&auto=format&fit=crop&q=60",
-      features: ["Enclosed Carriers", "Zero Scratch", "GPS Tracking"]
+      features: ["Confidential Handling", "System Disassembly", "24/7 Support"]
     },
     {
       title: "Premium Home Cleaning",
@@ -321,15 +302,14 @@ const ServicesPage = () => {
     <div className="section-padding container mx-auto px-6">
       <SectionHeader 
         label="Our Expertise" 
-        title="Comprehensive Capabilities." 
-        subtitle="From delicate heirlooms to heavy bank vaults, we have a protocol for every asset class." 
+        title="Reliable Services." 
+        subtitle="From home shifting to office relocation, we provide professional services at the best prices." 
       />
       
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-24 md:mb-32">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-24 md:mb-32">
          {[
             { icon: <Home />, label: "Home" },
             { icon: <Briefcase />, label: "Office" },
-            { icon: <Landmark />, label: "Banks" },
             { icon: <Sparkles />, label: "Cleaning" }
          ].map((item, i) => (
             <div key={i} className="p-6 md:p-8 rounded-2xl border border-white/5 bg-[#0a0a0a] flex flex-col items-center justify-center gap-4 hover:border-[#fbbf24] transition-colors cursor-pointer group">
@@ -352,10 +332,10 @@ const ProcessPage = () => {
   const [activeStep, setActiveStep] = useState(0);
   
   const steps = [
-    { title: "Consultation", desc: "Video survey or onsite visit to inventory items. Instant quote generation.", img: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=600&q=60" },
-    { title: "Packing Day", desc: "Team arrives with color-coded boxes. Fragile items get 3-layer protection.", img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=60" },
-    { title: "Secure Transit", desc: "Goods loaded into GPS-enabled closed containers. Live tracking link provided.", img: "https://images.unsplash.com/photo-1604357209793-fca5dca89f97?w=600&auto=format&fit=crop&q=60" },
-    { title: "The Unboxing", desc: "We unload, assemble furniture, and remove all debris before leaving.", img: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=600&q=60" }
+    { title: "Free Quote", desc: "Contact us for a free, no-obligation quote. We offer the best prices in the market.", img: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=600&q=60" },
+    { title: "Packing", desc: "Our professional team arrives with premium packaging materials to secure your goods.", img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=60" },
+    { title: "Moving", desc: "Prompt and reliable transit using our verified fleet of vehicles.", img: "https://images.unsplash.com/photo-1604357209793-fca5dca89f97?w=600&auto=format&fit=crop&q=60" },
+    { title: "Unpacking", desc: "We unload and help you settle in. Hassle-free experience guaranteed.", img: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=600&q=60" }
   ];
 
   return (
@@ -401,7 +381,6 @@ const ProcessPage = () => {
   );
 };
 
-// --- ABOUT PAGE: OPTIMIZED IMAGES ---
 const AboutPage = () => (
   <div className="section-padding container mx-auto px-6">
      <div className="grid lg:grid-cols-12 gap-16 items-center mb-40">
@@ -411,13 +390,13 @@ const AboutPage = () => (
              "We don't just move objects. <br/> <span className="text-transparent bg-clip-text bg-linear-to-r from-[#fbbf24] to-orange-600">We move lives."</span>
            </h2>
            <p className="text-xl text-gray-400 mb-12 leading-relaxed max-w-2xl">
-              SafeGuard was founded on a simple premise: Moving is one of life's most stressful events. It shouldn't be. We replaced the "guys in a truck" model with a "hospitality logistics" model.
+              LogisticMart was founded on a simple premise: Moving is one of life's most stressful events. It shouldn't be. We replaced the "guys in a truck" model with a "hospitality logistics" model.
            </p>
            
            <div className="grid grid-cols-2 gap-8 pt-8 border-t border-white/10">
               <div>
                  <span className="block text-4xl md:text-5xl font-black text-white mb-2">500+</span>
-                 <span className="text-xs text-gray-500 uppercase tracking-widest font-bold">Vetted Experts</span>
+                 <span className="text-xs text-gray-500 uppercase tracking-widest font-bold">Verified Experts</span>
               </div>
               <div>
                  <span className="block text-4xl md:text-5xl font-black text-white mb-2">20+</span>
@@ -461,10 +440,10 @@ const AboutPage = () => (
              img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=60" 
            },
            { 
-             role: "The Shield", 
-             title: "Safety Fleet", 
-             desc: "Air-ride suspension trucks that eliminate road vibration.",
-             img: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=600&q=60" 
+             role: "The Assurance", 
+             title: "Premium Packaging", 
+             desc: "Multi-layer protection using high-grade materials. Zero damage guarantee.",
+             img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=60" 
            }
         ].map((item, i) => (
            <div key={i} className="group relative h-[500px] w-full rounded-[2rem] overflow-hidden bg-[#0a0a0a] border border-white/5">
@@ -491,84 +470,154 @@ const AboutPage = () => (
   </div>
 );
 
-const ContactPage = () => (
-  <div className="h-screen w-full flex items-center justify-center relative overflow-hidden pt-20"> 
-     <div className="container mx-auto px-4 lg:px-6">
-        <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-24 items-center animate-enter">
-           
-           <div className="lg:hidden text-center mb-6">
-              <h2 className="text-4xl font-black text-white mb-2 leading-none">
-                 LET'S <br/> <span className="text-[#fbbf24]">MOVE.</span>
-              </h2>
-              <p className="text-sm text-gray-400">Precision quote in 2 hours.</p>
-           </div>
+const ContactPage = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    from: '',
+    to: '',
+    details: ''
+  });
 
-           <div className="hidden lg:flex flex-col justify-center">
-              <h2 className="text-7xl xl:text-8xl font-black text-white mb-8 leading-[0.9]">
-                 LET'S <br/> <span className="text-[#fbbf24]">MOVE.</span>
-              </h2>
-              <p className="text-xl text-gray-400 mb-12 leading-relaxed max-w-lg">
-                 Ready for the smoothest move? Fill out the form for a precision quote in 2 hours.
-              </p>
-              
-              <div className="space-y-8">
-                 <div className="flex items-center gap-6">
-                    <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center text-[#fbbf24]">
-                       <Phone className="w-6 h-6" />
-                    </div>
-                    <div>
-                       <p className="text-xs text-gray-500 font-bold uppercase mb-1">Call Us</p>
-                       <p className="text-2xl font-bold text-white">+91 98765 43210</p>
-                    </div>
-                 </div>
-                 <div className="flex items-center gap-6">
-                    <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center text-[#fbbf24]">
-                       <Globe className="w-6 h-6" />
-                    </div>
-                    <div>
-                       <p className="text-xs text-gray-500 font-bold uppercase mb-1">Email</p>
-                       <p className="text-2xl font-bold text-white">hello@safeguard.in</p>
-                    </div>
-                 </div>
-              </div>
-           </div>
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
 
-           <div className="bg-[#0a0a0a] p-6 md:p-12 rounded-[2.5rem] border border-white/10 shadow-2xl relative w-full mx-auto">
-              <form className="space-y-4 md:space-y-6"> 
-                 <div className="grid grid-cols-2 gap-4 md:gap-6">
-                    <div className="group">
-                       <label className="text-[10px] md:text-xs text-gray-500 font-bold uppercase mb-2 block ml-1 transition-colors group-focus-within:text-[#fbbf24]">Name</label>
-                       <input className="w-full bg-white/5 border border-white/10 p-3 md:p-4 h-12 md:h-14 rounded-xl text-white focus:border-[#fbbf24] outline-none transition-all text-sm md:text-base" placeholder="John Doe" />
-                    </div>
-                    <div className="group">
-                       <label className="text-[10px] md:text-xs text-gray-500 font-bold uppercase mb-2 block ml-1 transition-colors group-focus-within:text-[#fbbf24]">Phone</label>
-                       <input className="w-full bg-white/5 border border-white/10 p-3 md:p-4 h-12 md:h-14 rounded-xl text-white focus:border-[#fbbf24] outline-none transition-all text-sm md:text-base" placeholder="+91..." />
-                    </div>
-                 </div>
-                 
-                 <div className="grid grid-cols-2 gap-4 md:gap-6">
-                    <div className="group">
-                       <label className="text-[10px] md:text-xs text-gray-500 font-bold uppercase mb-2 block ml-1 transition-colors group-focus-within:text-[#fbbf24]">From</label>
-                       <input className="w-full bg-white/5 border border-white/10 p-3 md:p-4 h-12 md:h-14 rounded-xl text-white focus:border-[#fbbf24] outline-none transition-all text-sm md:text-base" placeholder="Origin City" />
-                    </div>
-                    <div className="group">
-                       <label className="text-[10px] md:text-xs text-gray-500 font-bold uppercase mb-2 block ml-1 transition-colors group-focus-within:text-[#fbbf24]">To</label>
-                       <input className="w-full bg-white/5 border border-white/10 p-3 md:p-4 h-12 md:h-14 rounded-xl text-white focus:border-[#fbbf24] outline-none transition-all text-sm md:text-base" placeholder="Destination City" />
-                    </div>
-                 </div>
+  const handleQuoteRequest = (e) => {
+    e.preventDefault();
+    const { name, phone, from, to, details } = formData;
+    
+    if(!name || !phone) {
+      alert("Please fill in your Name and Phone number so we can contact you.");
+      return;
+    }
 
-                 <div className="group">
-                    <label className="text-[10px] md:text-xs text-gray-500 font-bold uppercase mb-2 block ml-1 transition-colors group-focus-within:text-[#fbbf24]">Inventory Details</label>
-                    <textarea className="w-full bg-white/5 border border-white/10 p-3 md:p-4 rounded-xl h-20 md:h-32 resize-none text-white focus:border-[#fbbf24] outline-none transition-all text-sm md:text-base" placeholder="List key items (e.g. Piano, Server Rack)..."></textarea>
-                 </div>
+    const subject = `Priority Quote Request: ${name}`;
+    const body = `Name: ${name}
+Phone: ${phone}
+From: ${from}
+To: ${to}
 
-                 <Button primary className="w-full py-4 md:py-5 text-xs md:text-sm tracking-widest">Request Priority Quote</Button>
-              </form>
-           </div>
-        </div>
-     </div>
-  </div>
-);
+Inventory Details:
+${details}
+
+[Sent from LogisticMart Website]`;
+
+    const mailtoLink = `mailto:safeguardhomeshifters@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    
+    window.location.href = mailtoLink;
+  };
+
+  return (
+    <div className="h-screen w-full flex items-center justify-center relative overflow-hidden pt-20"> 
+       <div className="container mx-auto px-4 lg:px-6">
+          <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-24 items-center animate-enter">
+             
+             <div className="lg:hidden text-center mb-6">
+                <h2 className="text-4xl font-black text-white mb-2 leading-none">
+                   LET'S <br/> <span className="text-[#fbbf24]">MOVE.</span>
+                </h2>
+                <p className="text-sm text-gray-400">Precision quote in 2 hours.</p>
+             </div>
+
+             <div className="hidden lg:flex flex-col justify-center">
+                <h2 className="text-7xl xl:text-8xl font-black text-white mb-8 leading-[0.9]">
+                   LET'S <br/> <span className="text-[#fbbf24]">MOVE.</span>
+                </h2>
+                <p className="text-xl text-gray-400 mb-12 leading-relaxed max-w-lg">
+                   Ready for the smoothest move? Fill out the form for a precision quote in 2 hours.
+                </p>
+                
+                <div className="space-y-8">
+                   <div className="flex items-center gap-6">
+                      <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center text-[#fbbf24]">
+                         <Phone className="w-6 h-6" />
+                      </div>
+                      <div>
+                         <p className="text-xs text-gray-500 font-bold uppercase mb-1">Call Us</p>
+                         <p className="text-2xl font-bold text-white">+91 8590424294</p>
+                      </div>
+                   </div>
+                   <div className="flex items-center gap-6">
+                      <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center text-[#fbbf24]">
+                         <Globe className="w-6 h-6" />
+                      </div>
+                      <div>
+                         <p className="text-xs text-gray-500 font-bold uppercase mb-1">Email</p>
+                         <p className="text-2xl font-bold text-white">safeguardhomeshifters@gmail.com</p>
+                      </div>
+                   </div>
+                </div>
+             </div>
+
+             <div className="bg-[#0a0a0a] p-6 md:p-12 rounded-[2.5rem] border border-white/10 shadow-2xl relative w-full mx-auto">
+                <form className="space-y-4 md:space-y-6"> 
+                   <div className="grid grid-cols-2 gap-4 md:gap-6">
+                      <div className="group">
+                         <label className="text-[10px] md:text-xs text-gray-500 font-bold uppercase mb-2 block ml-1 transition-colors group-focus-within:text-[#fbbf24]">Name</label>
+                         <input 
+                            name="name" 
+                            value={formData.name} 
+                            onChange={handleChange}
+                            className="w-full bg-white/5 border border-white/10 p-3 md:p-4 h-12 md:h-14 rounded-xl text-white focus:border-[#fbbf24] outline-none transition-all text-sm md:text-base" 
+                            placeholder="John Doe" 
+                         />
+                      </div>
+                      <div className="group">
+                         <label className="text-[10px] md:text-xs text-gray-500 font-bold uppercase mb-2 block ml-1 transition-colors group-focus-within:text-[#fbbf24]">Phone</label>
+                         <input 
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleChange}
+                            className="w-full bg-white/5 border border-white/10 p-3 md:p-4 h-12 md:h-14 rounded-xl text-white focus:border-[#fbbf24] outline-none transition-all text-sm md:text-base" 
+                            placeholder="+91..." 
+                         />
+                      </div>
+                   </div>
+                   
+                   <div className="grid grid-cols-2 gap-4 md:gap-6">
+                      <div className="group">
+                         <label className="text-[10px] md:text-xs text-gray-500 font-bold uppercase mb-2 block ml-1 transition-colors group-focus-within:text-[#fbbf24]">From</label>
+                         <input 
+                            name="from"
+                            value={formData.from}
+                            onChange={handleChange}
+                            className="w-full bg-white/5 border border-white/10 p-3 md:p-4 h-12 md:h-14 rounded-xl text-white focus:border-[#fbbf24] outline-none transition-all text-sm md:text-base" 
+                            placeholder="Origin City" 
+                         />
+                      </div>
+                      <div className="group">
+                         <label className="text-[10px] md:text-xs text-gray-500 font-bold uppercase mb-2 block ml-1 transition-colors group-focus-within:text-[#fbbf24]">To</label>
+                         <input 
+                            name="to"
+                            value={formData.to}
+                            onChange={handleChange}
+                            className="w-full bg-white/5 border border-white/10 p-3 md:p-4 h-12 md:h-14 rounded-xl text-white focus:border-[#fbbf24] outline-none transition-all text-sm md:text-base" 
+                            placeholder="Destination City" 
+                         />
+                      </div>
+                   </div>
+
+                   <div className="group">
+                      <label className="text-[10px] md:text-xs text-gray-500 font-bold uppercase mb-2 block ml-1 transition-colors group-focus-within:text-[#fbbf24]">Inventory Details</label>
+                      <textarea 
+                          name="details"
+                          value={formData.details}
+                          onChange={handleChange}
+                          className="w-full bg-white/5 border border-white/10 p-3 md:p-4 rounded-xl h-20 md:h-32 resize-none text-white focus:border-[#fbbf24] outline-none transition-all text-sm md:text-base" 
+                          placeholder="List key items (e.g. Piano, Server Rack)..."
+                      ></textarea>
+                   </div>
+
+                   <Button primary onClick={handleQuoteRequest} className="w-full py-4 md:py-5 text-xs md:text-sm tracking-widest">Request Priority Quote</Button>
+                </form>
+             </div>
+          </div>
+       </div>
+    </div>
+  );
+};
 
 const App = () => {
   const [activePage, setActivePage] = useState('home');
@@ -602,7 +651,7 @@ const App = () => {
                    <Shield className="w-full h-full text-[#fbbf24] fill-[#fbbf24] absolute transition-transform group-hover:scale-110" />
                    <Home className="w-4 h-4 text-black absolute z-10 mb-0.5" />
                 </div>
-                <span className="text-xl font-black tracking-tighter text-white">SAFE<span className="text-[#fbbf24]">GUARD</span></span>
+                <span className="text-xl font-black tracking-tighter text-white">LOGISTIC<span className="text-[#fbbf24]">MART</span></span>
              </div>
 
              <div className="hidden md:flex items-center gap-10">
@@ -629,7 +678,7 @@ const App = () => {
         </div>
       </nav>
 
-      {/* FIXED MOBILE MENU (Version 33.0 - Clean & Minimalist) */}
+      {/* FIXED MOBILE MENU */}
       <div className={`fixed inset-0 z-40 bg-black transition-all duration-700 ease-[cubic-bezier(0.76,0,0.24,1)] ${menuOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}>
          <div className="h-full flex flex-col items-center justify-center gap-10 relative overflow-hidden">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#fbbf24] opacity-5 blur-[150px] rounded-full pointer-events-none"></div>
@@ -657,11 +706,10 @@ const App = () => {
          {activePage === 'contact' && <ContactPage />}
       </main>
 
-      {/* FOOTER - Hidden on Contact Page to prevent scrolling */}
+      {/* FOOTER */}
       {activePage !== 'contact' && (
         <footer className="relative z-10 pt-24 pb-12 overflow-hidden border-t border-white/5">
-            {/* Subtler Giant Text Background */}
-             <h2 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[25vw] font-black text-white leading-none select-none tracking-tighter opacity-[0.02] mix-blend-overlay pointer-events-none">SAFEGUARD</h2>
+             <h2 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[25vw] font-black text-white leading-none select-none tracking-tighter opacity-[0.02] mix-blend-overlay pointer-events-none">LOGISTICMART</h2>
 
             <div className="container mx-auto px-6 relative z-10">
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
@@ -672,10 +720,10 @@ const App = () => {
                                 <Shield className="w-full h-full text-[#fbbf24] fill-[#fbbf24] transition-transform group-hover:scale-110" />
                                 <Home className="w-3 h-3 text-black absolute z-10 mb-0.5" />
                              </div>
-                             <span className="text-xl font-black tracking-tighter text-white">SAFE<span className="text-[#fbbf24]">GUARD</span></span>
+                             <span className="text-xl font-black tracking-tighter text-white">LOGISTIC<span className="text-[#fbbf24]">MART</span></span>
                         </div>
                         <p className="text-gray-400 text-sm leading-relaxed max-w-sm mb-8">
-                            Redefining logistics with military-grade precision and white-glove care. Your assets, our mission.
+                            LogisticMart offers prompt, reliable, and professional relocation services. Your satisfaction is our priority.
                         </p>
                     </div>
 
@@ -695,7 +743,7 @@ const App = () => {
                     <div className="md:col-span-3 animate-enter delay-200">
                         <h4 className="text-white font-bold uppercase tracking-widest text-xs mb-6">Expertise</h4>
                         <ul className="space-y-3">
-                            {['Residential Moving', 'Office Relocation', 'High-Value & Banks', 'Vehicle Transport', 'Premium Cleaning'].map(link => (
+                            {['Residential Moving', 'Office Relocation', 'Premium Cleaning'].map(link => (
                                 <li key={link}><a href="#" className="text-gray-400 hover:text-[#fbbf24] transition-colors text-sm">{link}</a></li>
                             ))}
                         </ul>
@@ -707,15 +755,15 @@ const App = () => {
                          <ul className="space-y-4">
                             <li className="flex items-start gap-3 text-gray-400 text-sm group">
                                 <MapPin className="w-5 h-5 text-[#fbbf24] shrink-0 group-hover:scale-110 transition-transform" />
-                                <span>123 Prestige Tower, Financial District, Mumbai, India</span>
+                                <span>India</span>
                             </li>
                             <li className="flex items-center gap-3 text-gray-400 text-sm group">
                                 <Phone className="w-5 h-5 text-[#fbbf24] shrink-0 group-hover:scale-110 transition-transform" />
-                                <span>+91 98765 43210</span>
+                                <span>+91 8590424294</span>
                             </li>
                             <li className="flex items-center gap-3 text-gray-400 text-sm group">
                                 <Mail className="w-5 h-5 text-[#fbbf24] shrink-0 group-hover:scale-110 transition-transform" />
-                                <span>hello@safeguard.in</span>
+                                <span>safeguardhomeshifters@gmail.com</span>
                             </li>
                          </ul>
                     </div>
@@ -723,7 +771,7 @@ const App = () => {
 
                 {/* Bottom Section */}
                 <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 animate-enter delay-500">
-                    <p className="text-gray-500 text-xs uppercase tracking-widest font-bold">© 2026 SafeGuard Logistics. All rights reserved.</p>
+                    <p className="text-gray-500 text-xs uppercase tracking-widest font-bold">© 2026 LogisticMart. All rights reserved.</p>
                      <div className="flex gap-6 text-gray-500 text-xs uppercase tracking-widest font-bold">
                         <a href="#" className="hover:text-[#fbbf24] transition-colors">Privacy</a>
                         <a href="#" className="hover:text-[#fbbf24] transition-colors">Terms</a>
